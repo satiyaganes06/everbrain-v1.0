@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "211338720894",
+    "project_id": "everbrain-a6262",
+    "storage_bucket": "everbrain-a6262.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:211338720894:android:957d4e4083991455fd8a2f",
+        "android_client_info": {
+          "package_name": "com.example.everbrain"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "211338720894-etc07p0dch7pchhikpn5mbbad6v3vqpi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbVFihxA9GlczrSiPxmo1ZCl6IiYYz1QU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "211338720894-etc07p0dch7pchhikpn5mbbad6v3vqpi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
