@@ -6,7 +6,7 @@ import 'package:everbrain/utils/dimensions.dart' as dimens;
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../presentation/Screens/master_password_hint_Screen.dart';
+import '../Screens/masterPasswordReq/master_password_hint_Screen.dart';
 
 class GetHintLogin extends StatelessWidget {
   const GetHintLogin({Key? key}) : super(key: key);

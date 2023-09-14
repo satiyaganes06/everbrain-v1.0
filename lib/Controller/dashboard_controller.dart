@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import '../Model/vault_model.dart';
-import '../presentation/Screens/dashboard_Screen.dart';
+import '../presentation/Screens/dashboard/dashboard_Screen.dart';
 import '../core/localServices/hive_service.dart';
 
 class DashboardController extends GetxController{

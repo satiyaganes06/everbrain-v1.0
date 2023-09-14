@@ -7,7 +7,7 @@ import '../../Controller/flutter_encry_controller.dart';
 import '../../Controller/login_controller.dart';
 import '../../Controller/signup_controller.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
-import '../../presentation/Screens/email_verify_Screen.dart';
+import '../../presentation/Screens/auth/emailVerification/email_verify_Screen.dart';
 import '../../presentation/Widget/loading.dart';
 import '../localServices/secure_storage_repository.dart';
 

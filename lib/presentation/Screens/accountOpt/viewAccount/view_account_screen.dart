@@ -8,14 +8,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/constants.dart' as constants;
 import 'package:everbrain/utils/dimensions.dart' as dimens;
-import '../../Controller/add_new_account_controller.dart';
-import '../../Controller/edit_account_controller.dart';
-import '../../Controller/flutter_encry_controller.dart';
-import '../../Model/vault_model.dart';
-import '../../presentation/Widget/space.dart';
-import '../../presentation/Widget/subtitle2_font.dart';
-import '../../presentation/Widget/subtitle_font copy.dart';
-import 'edit_account_screen.dart';
+import '../../../../Controller/add_new_account_controller.dart';
+import '../../../../Controller/edit_account_controller.dart';
+import '../../../../Controller/flutter_encry_controller.dart';
+import '../../../../Model/vault_model.dart';
+import '../../../Widget/space.dart';
+import '../../../Widget/subtitle2_font.dart';
+import '../../../Widget/subtitle_font copy.dart';
+import '../editAccount/edit_account_screen.dart';
 
 class ViewVaultScreen extends StatefulWidget {
   final vault;

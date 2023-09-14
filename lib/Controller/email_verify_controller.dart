@@ -1,7 +1,7 @@
 
 import 'dart:async';
 
-import 'package:everbrain/presentation/Screens/dashboard_Screen.dart';
+import 'package:everbrain/presentation/Screens/dashboard/dashboard_Screen.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
 import 'login_controller.dart';

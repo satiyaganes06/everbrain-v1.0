@@ -6,9 +6,9 @@ import 'package:lottie/lottie.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/constants.dart' as constants;
 import 'package:everbrain/utils/dimensions.dart' as dimens;
-import '../../Controller/login_controller.dart';
-import '../../Controller/master_password_hint_controller.dart';
-import '../../presentation/Widget/space.dart';
+import '../../../Controller/login_controller.dart';
+import '../../../Controller/master_password_hint_controller.dart';
+import '../../Widget/space.dart';
 
 class PasswordHintScreen extends StatelessWidget {
   final masterPassController = Get.put(MasterPassswordHintController());

@@ -1,13 +1,13 @@
 import 'package:delayed_display/delayed_display.dart';
-import 'package:everbrain/presentation/Screens/dashboard_Screen.dart';
+import 'package:everbrain/presentation/Screens/dashboard/dashboard_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:lottie/lottie.dart';
-import '../../Controller/email_verify_controller.dart';
-import '../../Controller/login_controller.dart';
-import '../../presentation/Widget/space.dart';
+import '../../../../Controller/email_verify_controller.dart';
+import '../../../../Controller/login_controller.dart';
+import '../../../Widget/space.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
   const VerifyEmailScreen({Key? key}) : super(key: key);

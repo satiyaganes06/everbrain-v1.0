@@ -11,11 +11,11 @@ import 'package:everbrain/utils/constants.dart' as constants;
 import 'package:everbrain/utils/dimensions.dart' as dimens;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
-import '../../Controller/edit_account_controller.dart';
-import '../../Model/vault_model.dart';
-import '../Widget/category_button.dart';
-import '../Widget/subtitle_font copy.dart';
-import '../../core/path/path.dart';
+import '../../../../Controller/edit_account_controller.dart';
+import '../../../../Model/vault_model.dart';
+import '../../../Widget/category_button.dart';
+import '../../../Widget/subtitle_font copy.dart';
+import '../../../../core/path/path.dart';
 
 class EditAccountScreen extends StatefulWidget {
   Vault vault;

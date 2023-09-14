@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:everbrain/presentation/Screens/widget_Tree.dart';
+import 'package:everbrain/presentation/Screens/auth/widget_Tree.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:screen_protector/screen_protector.dart';
 import 'Model/vault_model.dart';
-import 'presentation/Screens/SplashScreen.dart';
+import 'presentation/Screens/auth/SplashScreen.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'main_module.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';

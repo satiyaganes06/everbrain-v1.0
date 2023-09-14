@@ -5,7 +5,7 @@ import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import '../../Controller/login_controller.dart';
-import '../Screens/master_password_hint_Screen.dart';
+import '../Screens/masterPasswordReq/master_password_hint_Screen.dart';
 
 class CustomAppBar extends StatelessWidget {
   final loginController = Get.find<LoginController>();

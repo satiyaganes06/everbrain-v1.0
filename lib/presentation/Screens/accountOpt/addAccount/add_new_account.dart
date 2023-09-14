@@ -13,11 +13,11 @@ import 'package:everbrain/utils/dimensions.dart' as dimens;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 
-import '../../Model/vault_model.dart';
-import '../Widget/category_button.dart';
-import '../Widget/subtitle2_font.dart';
-import '../Widget/subtitle_font copy.dart';
-import 'dashboard_Screen.dart';
+import '../../../../Model/vault_model.dart';
+import '../../../Widget/category_button.dart';
+import '../../../Widget/subtitle2_font.dart';
+import '../../../Widget/subtitle_font copy.dart';
+import '../../dashboard/dashboard_Screen.dart';
 
 
 class AddNewAccount extends StatefulWidget {

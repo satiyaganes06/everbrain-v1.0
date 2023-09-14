@@ -11,9 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../Controller/login_controller.dart';
-import '../Widget/custom_appbar.dart';
-import 'add_new_account.dart';
+import '../../../Controller/login_controller.dart';
+import '../../Widget/custom_appbar.dart';
+import '../accountOpt/addAccount/add_new_account.dart';
 import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
 
 class DashboardScreen extends StatefulWidget {

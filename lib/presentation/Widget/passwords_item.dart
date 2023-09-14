@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:everbrain/presentation/Screens/view_account_screen.dart';
+import 'package:everbrain/presentation/Screens/accountOpt/viewAccount/view_account_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:get/get.dart';

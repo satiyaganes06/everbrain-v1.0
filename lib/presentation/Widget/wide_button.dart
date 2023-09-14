@@ -1,6 +1,6 @@
 // ignore_for_file: sort_child_properties_last
 
-import 'package:everbrain/presentation/Screens/dashboard_Screen.dart';
+import 'package:everbrain/presentation/Screens/dashboard/dashboard_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
