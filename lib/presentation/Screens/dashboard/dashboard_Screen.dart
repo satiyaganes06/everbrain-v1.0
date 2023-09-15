@@ -1,17 +1,14 @@
-import 'package:animations/animations.dart';
 import 'package:auto_animated/auto_animated.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:delayed_display/delayed_display.dart';
-import 'package:everbrain/Controller/dashboard_controller.dart';
+import 'package:everbrain/controller/dashboard_controller.getx.dart';
 import 'package:everbrain/presentation/Widget/pageTitle.dart';
 import 'package:everbrain/presentation/Widget/category_button.dart';
 import 'package:everbrain/presentation/Widget/passwords_item.dart';
-import 'package:everbrain/presentation/Widget/space.dart';
 import 'package:flutter/material.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../Controller/login_controller.dart';
+import '../../../controller/login_controller.getx.dart';
 import '../../Widget/custom_appbar.dart';
 import '../accountOpt/addAccount/add_new_account.dart';
 import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
@@ -48,6 +45,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           buildCategoriesButtons(),
                           buildTitle('Passwords'),
                           buildPasswordList(context),
+
                         ])))),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: ScrollingFabAnimated(

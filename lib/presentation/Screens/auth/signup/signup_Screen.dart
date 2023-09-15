@@ -1,6 +1,6 @@
 // ignore_for_file: sort_child_properties_last
 import 'package:delayed_display/delayed_display.dart';
-import 'package:everbrain/Controller/login_controller.dart';
+import 'package:everbrain/controller/login_controller.getx.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
@@ -18,7 +18,7 @@ import 'Widget/mPasswordField.dart';
 import 'Widget/mPasswordHint.dart';
 import 'Widget/rowAlreadyHave.dart';
 import 'Widget/signInButton.dart';
-import '../../../../Controller/signup_controller.dart';
+import '../../../../controller/signup_controller.getx.dart';
 
 
 class SignUpScreen extends StatelessWidget {

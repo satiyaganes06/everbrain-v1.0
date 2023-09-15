@@ -7,7 +7,7 @@ import 'package:everbrain/utils/constants.dart' as constants;
 import 'package:everbrain/utils/dimensions.dart' as dimens;
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../../../Controller/signup_controller.dart';
+import '../../../../../controller/signup_controller.getx.dart';
 
 class MasterPasswordHint extends StatelessWidget {
   MasterPasswordHint({Key? key}) : super(key: key);

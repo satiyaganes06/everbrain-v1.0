@@ -1,12 +1,10 @@
 import 'dart:io';
-
 import 'package:everbrain/presentation/Screens/auth/widget_Tree.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:screen_protector/screen_protector.dart';
 import 'Model/vault_model.dart';
 import 'presentation/Screens/auth/SplashScreen.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
@@ -18,8 +16,14 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  _protectDataLeakageOn() ;
-  await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
+    if(Platform.isAndroid){
+      FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+      FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_BLUR_BEHIND);
+      FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_DIM_BEHIND);
+    }
+  });
+  
   MainModule.init();
   await Hive.initFlutter();
   Hive.registerAdapter(VaultAdapter());
@@ -61,17 +65,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-void _protectDataLeakageOn() async{
-  if(Platform.isAndroid){
-    await ScreenProtector.protectDataLeakageOff();
-    await ScreenProtector.preventScreenshotOff();
-    
-  }else{
-    await ScreenProtector.protectDataLeakageWithColor(colors.AppColor.primaryColor);
-    await ScreenProtector.preventScreenshotOff();
-  }
-
-}
 
 class Init {
   Init._();

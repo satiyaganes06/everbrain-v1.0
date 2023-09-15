@@ -1,5 +1,5 @@
 
-import 'package:everbrain/Controller/login_controller.dart';
+import 'package:everbrain/controller/login_controller.getx.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';

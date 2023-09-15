@@ -6,22 +6,21 @@ import 'package:lottie/lottie.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/constants.dart' as constants;
 import 'package:everbrain/utils/dimensions.dart' as dimens;
-import '../../../Controller/login_controller.dart';
-import '../../../Controller/master_password_hint_controller.dart';
+import '../../../controller/master_password_hint_controller.getx.dart';
 import '../../Widget/space.dart';
 
 class PasswordHintScreen extends StatelessWidget {
-  final masterPassController = Get.put(MasterPassswordHintController());
-
   @override
   Widget build(BuildContext context) {
+    final masterPassController = Get.put(MasterPassswordHintController());
     return Scaffold(
       backgroundColor: colors.AppColor.secondaryColor,
       body: SafeArea(
           child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child:
-                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center, children: [
                 Space(Get.height * 0.1),
                 DelayedDisplay(
                   delay: const Duration(milliseconds: 230),
@@ -92,7 +91,7 @@ class PasswordHintScreen extends StatelessWidget {
                       elevation: 6.1,
                       child: InkWell(
                           onTap: () {
-                            masterPassController.sendHintToEmail();
+                            masterPassController.sendHintToEmail(context);
                             // loginController.firebaseService.resetPassword(emailField.text.trim(), context);
                           },
                           borderRadius: BorderRadius.circular(10),

@@ -1,23 +1,25 @@
 
-import 'package:everbrain/Controller/login_controller.dart';
-import 'package:everbrain/Model/vault_model.dart';
+import 'package:everbrain/controller/login_controller.getx.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:everbrain/utils/colors.dart' as colors;
+import 'package:uuid/uuid.dart';
 
-class EditAccountController extends GetxController{
+import '../Model/vault_model.dart';
+
+class AddNewAccountController extends GetxController {
+  final loginController = Get.find<LoginController>();
+
   TextEditingController searchCompanyName = TextEditingController();
   TextEditingController companyName = TextEditingController();
   TextEditingController emailRusernameRphone = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController hintPassword = TextEditingController();
-  bool _passwordToggle = true;
+  bool passwordToggle = true;
   bool isFavourite = false;
   bool isReMpassNeeded = false;
-  int animationDuration = 100;
 
-  bool get getPassToggle => _passwordToggle;
+  int animationDuration = 100;
 
   var category_Selector_List = [false, false, false, false, false, false].obs;
   int current_index = 0;
@@ -41,12 +43,8 @@ class EditAccountController extends GetxController{
   ];
 
   void funPasswordToggle() {
-    _passwordToggle = !_passwordToggle;
+    passwordToggle = !passwordToggle;
     update();
-  }
-
-  void makePassTrue(){
-    _passwordToggle = true;
   }
 
   void filterToggle(int index) {
@@ -143,39 +141,29 @@ class EditAccountController extends GetxController{
     update();
   }
 
-  void funPasswordCopy(String password, BuildContext context) {
-    Clipboard.setData(ClipboardData(text: password))
-    .then((value) { //only if ->
-       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text("Copied"),
-        backgroundColor: colors.AppColor.tertiaryColor,
-        duration: const Duration(seconds: 1),
-      ));});
-    
-  }
+  Vault getVaultObject() {
+    var uuid = const Uuid();
 
-  void editSetup(Vault vault) {
-    searchCompanyName.text = vault.sourceImageUrl;
-    companyName.text  = vault.sourceName;
-    emailRusernameRphone.text  = vault.vaultName;
-    password.text  = vault.vaultPassword;
-    hintPassword.text  = vault.hintPassword;
-    isFavourite = vault.isFavourite;
-    isReMpassNeeded = vault.isMPUnlock;
-    filterToggle(category_Button_Image_title.indexOf(vault.vaultCategory));
-  }
-
-  Vault updateCopyWith(Vault vault){
-    return vault.copyWith(
-        sourceName: companyName.text,
-        sourceImageUrl: searchCompanyName.text,
+    return Vault(
+        userID: loginController.firebaseService.currentUser!.uid.toString(),
+        vaultID: uuid.v4(),
+        sourceName: companyName.text.toString(),
+        sourceImageUrl: isUrl(searchCompanyName.text.toString()) ? searchCompanyName.text.toString() : 'https://www.usbforwindows.com/storage/img/images_3/function_set_default_image_when_image_not_present.png' ,
         vaultName: emailRusernameRphone.text,
         vaultPassword: password.text,
         hintPassword: hintPassword.text,
         vaultCategory: category_Button_Image_title[current_index].toString(),
         isFavourite: isFavourite,
-        isMPUnlock: isReMpassNeeded
-      );
+        isMPUnlock: isReMpassNeeded);
   }
 
+  bool isUrl(String input) {
+    RegExp urlPattern = RegExp(
+      r'^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-zA-Z0-9]+([\-\.]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,5}(:[0-9]{1,5})?(\/.*)?$',
+      caseSensitive: false,
+      multiLine: false,
+    );
+
+    return urlPattern.hasMatch(input);
+  }
 }

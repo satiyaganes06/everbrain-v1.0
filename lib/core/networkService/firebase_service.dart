@@ -3,9 +3,9 @@ import 'package:everbrain/presentation/Screens/auth/login/loginScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../Controller/flutter_encry_controller.dart';
-import '../../Controller/login_controller.dart';
-import '../../Controller/signup_controller.dart';
+import 'package:get_it/get_it.dart';
+import '../../controller/flutter_encry_controller.getx.dart';
+import '../../controller/login_controller.getx.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import '../../presentation/Screens/auth/emailVerification/email_verify_Screen.dart';
 import '../../presentation/Widget/loading.dart';
@@ -26,7 +26,7 @@ class FirebaseService {
   }
 
   //E-mail Sign Up
-  Future signUp(String _email, String _password, var context) async {
+  Future signUp(String _email, String _password, String passwordHints, bool isAgree , var context) async {
     showDialog(
         context: context,
         builder: (context) {
@@ -37,14 +37,9 @@ class FirebaseService {
       await _firebaseAuth
           .createUserWithEmailAndPassword(email: _email, password: _password)
           .then((value) {
-        final signUPControl = Get.find<SignUpController>();
-
-        createUser(_firebaseAuth.currentUser!.uid, signUPControl.passwordHints.text, signUPControl.isAgree);
-
-        signUPControl.emailField.clear();
-        signUPControl.passwordField.clear();
-        signUPControl.repasswordField.clear();
-        signUPControl.passwordHints.clear();
+        
+        createUser(_firebaseAuth.currentUser!.uid, _email, passwordHints, isAgree);
+       
         Get.off(const VerifyEmailScreen());
       });
     } on FirebaseAuthException catch (e) {
@@ -173,10 +168,11 @@ class FirebaseService {
     }
   }
 
-  Future<void> createUser(String userID, String hint, bool terms) async{
+  Future<void> createUser(String userID, String email, String hint, bool terms) async{
 
     var data = {
       'userID': userID,
+      'userEmail': email,
       'hints': hint,
       'Terms and conditions' : terms ? 'Agree' : 'Disagree'
     };
@@ -189,8 +185,8 @@ class FirebaseService {
     });
   }
 
-  Future<String?> getUserHints() async{
-    final hintDoc = await _fireStore.collection(_collectionHintName).where('userID', isEqualTo: _firebaseAuth.currentUser!.uid).get();
+  Future<String?> getUserHints(String email) async{
+    final hintDoc = await _fireStore.collection(_collectionHintName).where('userEmail', isEqualTo: email).get();
    // Map<String, dynamic> userData = hintDoc.data() as Map<String, dynamic>;
    if (hintDoc.docs.isNotEmpty) {
       // Get the first document (assuming user IDs are unique)
@@ -201,7 +197,7 @@ class FirebaseService {
       return userData['hints'].toString();
 
     }else{
-      return 'No hints';
+      return 'No hint found';
     }
   }
 

@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
+import 'package:everbrain/utils/constants.dart' as constants;
+import 'package:everbrain/utils/keys.dart' as KY;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'secure_storage_repository.dart';
 
 class LocalStorageSecureImpl extends LocalStorageSecure {
   FlutterSecureStorage? storage;
-  final _SECURENAME = 'sivaji_secure';
-  final _HIVEKNAME = 'sIvAji_HiVe';
+  
 
   @override
   Future<void> init() async {
@@ -17,10 +17,10 @@ class LocalStorageSecureImpl extends LocalStorageSecure {
             KeyCipherAlgorithm.RSA_ECB_OAEPwithSHA_256andMGF1Padding,
         storageCipherAlgorithm: StorageCipherAlgorithm.AES_GCM_NoPadding,
         encryptedSharedPreferences: true,
-        sharedPreferencesName: _SECURENAME.toString());
+        sharedPreferencesName: constants.Constants.hiveStorageName);
 
     IOSOptions getIOSOptions() => IOSOptions(
-        accountName: _SECURENAME,
+        accountName: constants.Constants.hiveStorageName,
         accessibility: KeychainAccessibility.unlocked_this_device);
 
     storage = FlutterSecureStorage(
@@ -71,17 +71,17 @@ class LocalStorageSecureImpl extends LocalStorageSecure {
     if (storage == null) await init();
 
     try {
-      final encryptionKey = await storage?.read(key: _HIVEKNAME);
+      final encryptionKey = await storage?.read(key: KY.KYS.hiveKY);
 
       if (encryptionKey == null) {
         final key = Hive.generateSecureKey();
         await storage?.write(
-          key: _HIVEKNAME,
+          key: KY.KYS.hiveKY,
           value: base64UrlEncode(key),
         );
       }
 
-      final encryptionKey2 = await storage?.read(key: _HIVEKNAME);
+      final encryptionKey2 = await storage?.read(key: KY.KYS.hiveKY);
       final encryptionKeyConfirm = base64Url.decode(encryptionKey2!);
       
       //await storage?.write(key: key, value: );

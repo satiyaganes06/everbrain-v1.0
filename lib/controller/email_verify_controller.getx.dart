@@ -1,11 +1,7 @@
 
 import 'dart:async';
-
-import 'package:everbrain/presentation/Screens/dashboard/dashboard_Screen.dart';
+import 'package:everbrain/controller/login_controller.getx.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/request/request.dart';
-import 'login_controller.dart';
-import 'package:everbrain/utils/colors.dart' as colors;
 
 class EmailVerifyController extends GetxController{
 

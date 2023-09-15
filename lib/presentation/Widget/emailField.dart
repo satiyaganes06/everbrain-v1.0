@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../Controller/login_controller.dart';
+import '../../controller/login_controller.getx.dart';
 
 class EmailFieldLogin extends StatelessWidget {
   EmailFieldLogin({Key? key}) : super(key: key);

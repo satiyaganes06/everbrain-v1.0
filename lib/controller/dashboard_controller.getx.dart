@@ -1,6 +1,6 @@
 import 'package:auto_animated/auto_animated.dart';
-import 'package:everbrain/Controller/add_new_account_controller.dart';
-import 'package:everbrain/Controller/edit_account_controller.dart';
+import 'package:everbrain/controller/add_new_account_controller.getx.dart';
+import 'package:everbrain/controller/edit_account_controller.getx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';

@@ -5,7 +5,7 @@ import 'package:everbrain/presentation/Widget/space.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
-import '../../../../Controller/login_controller.dart';
+import '../../../../controller/login_controller.getx.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/constants.dart' as constants;
 import 'package:everbrain/utils/dimensions.dart' as dimens;

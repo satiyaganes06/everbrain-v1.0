@@ -7,17 +7,14 @@ import 'package:everbrain/utils/dimensions.dart' as dimens;
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../../../Controller/signup_controller.dart';
-import '../../../../../Controller/login_controller.dart';
+import '../../../../../controller/signup_controller.getx.dart';
 
 class SignInButton extends StatelessWidget {
   var formkey; 
 
   SignInButton(this.formkey,{Key? key}) : super(key: key);
 
-  final loginController = Get.find<LoginController>();
   final signUpController = Get.find<SignUpController>();
-
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +28,7 @@ class SignInButton extends StatelessWidget {
         child: InkWell(
           onTap: (){
             if(formkey.currentState!.validate()){
-              loginController.firebaseService.signUp(signUpController.emailField.text, signUpController.passwordField.toString(), context);
+              signUpController.sigUpFun(context);
             }
             print(signUpController.passwordField.text);
             

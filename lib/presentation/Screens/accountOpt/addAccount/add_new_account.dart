@@ -1,8 +1,7 @@
-import 'dart:io';
 import 'package:auto_animated/auto_animated.dart';
 import 'package:delayed_display/delayed_display.dart';
-import 'package:everbrain/Controller/add_new_account_controller.dart';
-import 'package:everbrain/Controller/dashboard_controller.dart';
+import 'package:everbrain/controller/add_new_account_controller.getx.dart';
+import 'package:everbrain/controller/dashboard_controller.getx.dart';
 import 'package:everbrain/presentation/Widget/space.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -11,11 +10,7 @@ import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/constants.dart' as constants;
 import 'package:everbrain/utils/dimensions.dart' as dimens;
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
-
-import '../../../../Model/vault_model.dart';
 import '../../../Widget/category_button.dart';
-import '../../../Widget/subtitle2_font.dart';
 import '../../../Widget/subtitle_font copy.dart';
 import '../../dashboard/dashboard_Screen.dart';
 
@@ -341,7 +336,7 @@ class _AddNewAccountState extends State<AddNewAccount> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text('Use Master password to unlock ?', style: GoogleFonts.poppins(
+                                    Text('Use Biometric to unlock ?', style: GoogleFonts.poppins(
                                       color: colors.AppColor.accentColor,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14

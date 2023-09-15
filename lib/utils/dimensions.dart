@@ -5,6 +5,7 @@ class Dimens{
   //Globally
   static double masterPasswordIconSize = 20;
   static double masterPasswordIconSplashRadius = 20;
+  static int snackMessageDuration= 2;
 
   //Sign-Up
   static double overallPagePaddingSignUp = 20;
@@ -74,4 +75,6 @@ class Dimens{
   static double bottomSubmitButtomSpaceLogIn = Get.height*0.03;
   static double notAmemberSubtextFontSize = 12;
   static double notAmemberButtonFontSize = 12;
+
+  
 }

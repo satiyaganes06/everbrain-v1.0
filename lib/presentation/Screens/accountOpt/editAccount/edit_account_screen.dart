@@ -1,21 +1,22 @@
 import 'package:auto_animated/auto_animated.dart';
 import 'package:delayed_display/delayed_display.dart';
-import 'package:everbrain/Controller/dashboard_controller.dart';
-import 'package:everbrain/Controller/flutter_encry_controller.dart';
+import 'package:everbrain/controller/dashboard_controller.getx.dart';
+import 'package:everbrain/controller/flutter_encry_controller.getx.dart';
 import 'package:everbrain/presentation/Widget/space.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/constants.dart' as constants;
+import 'package:everbrain/utils/keys.dart' as KY;
 import 'package:everbrain/utils/dimensions.dart' as dimens;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
-import '../../../../Controller/edit_account_controller.dart';
+import '../../../../controller/edit_account_controller.getx.dart';
 import '../../../../Model/vault_model.dart';
+import '../../../Widget/appbar.dart';
 import '../../../Widget/category_button.dart';
 import '../../../Widget/subtitle_font copy.dart';
-import '../../../../core/path/path.dart';
 
 class EditAccountScreen extends StatefulWidget {
   Vault vault;
@@ -30,11 +31,9 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
   final editAccountController = Get.find<EditAccountController>();
   final dashboardController = Get.find<DashboardController>();
   final encryController = Get.find<FlutterEncryController>();
-  final path = Paths();
 
   @override
   void initState() {
-    
     editAccountController.editSetup(widget.vault);
 
     super.initState();
@@ -46,36 +45,18 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
 
     return Scaffold(
         key: _scaffoldKey,
-        appBar: AppBar(
-          leading: IconButton(
-            icon: GetPlatform.isAndroid
-                ? const Icon(Icons.arrow_back)
-                : const Icon(Icons.arrow_back_ios_new),
-            onPressed: () {
-              Get.back();
-            },
-            color: colors.AppColor.secondaryColor,
-            splashRadius: 20,
-          ),
-          backgroundColor: colors.AppColor.primaryColor,
-          elevation: 0.5,
-          title: Text(
-            constants.Constants.editAccountTitle,
-            style: GoogleFonts.poppins(
-                color: colors.AppColor.secondaryColor,
-                fontWeight: FontWeight.w500,
-                fontSize: 16),
-          ),
-          centerTitle: true,
-          actions: [
-            IconButton(
-                onPressed: () {
-
-                  _buildShowTextField(path.getOptDelete);
-                },
-                icon: const Icon(Icons.delete_rounded))
-          ],
-        ),
+        appBar: CommonAppbar(
+            title: constants.Constants.editAccountTitle,
+            isActionBtnEnable: true,
+            actionBtnFunction: () {
+              !widget.vault.isMPUnlock
+                  ? _buildShowTextField(KY.KYS.optDelete)
+                  : encryController.biometricUnlock(
+                      optValue: KY.KYS.optDelete,
+                      title: 'delete account',
+                      context: context,
+                      vault: widget.vault);
+            }),
         body: Container(
             color: Colors.white,
             child: SingleChildScrollView(
@@ -180,16 +161,14 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                           child: SizedBox(
                             width: dimens.Dimens.emailContainerHeightSignUp,
                             child: GetBuilder<EditAccountController>(
-                              initState: (state) {
-                                editAccountController.makePassTrue();
-                              },
-                              dispose: (state) {
-                                editAccountController.makePassTrue();
-                              },
-                                builder: (_) {
+                                initState: (state) {
+                              editAccountController.makePassTrue();
+                            }, dispose: (state) {
+                              editAccountController.makePassTrue();
+                            }, builder: (_) {
                               return TextFormField(
                                 controller: editAccountController.password,
-                                keyboardType:TextInputType.visiblePassword,
+                                keyboardType: TextInputType.visiblePassword,
                                 obscureText:
                                     editAccountController.getPassToggle,
                                 cursorColor: Colors.grey,
@@ -212,12 +191,20 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                                       const EdgeInsets.only(left: 20),
                                   suffixIcon: IconButton(
                                     onPressed: () {
-                                      editAccountController.getPassToggle == false ? editAccountController.funPasswordToggle() : _buildShowTextField(path.getOptPass);
-
-                                      
+                                      editAccountController.getPassToggle ==
+                                              false
+                                          ? editAccountController
+                                              .funPasswordToggle()
+                                          : !widget.vault.isMPUnlock
+                                              ? _buildShowTextField(
+                                                  KY.KYS.optPass)
+                                              : encryController.biometricUnlock(
+                                                  optValue: KY.KYS.optPass,
+                                                  title: 'unlock password',
+                                                  context: context,
+                                                  vault: widget.vault);
                                     },
-                                    icon: editAccountController
-                                                .getPassToggle ==
+                                    icon: editAccountController.getPassToggle ==
                                             false
                                         ? const Icon(
                                             Icons.visibility_off_outlined)
@@ -286,42 +273,43 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                                   }
                                 },
                               ))),
-                              Space(Get.height*0.03),
-
-                    DelayedDisplay(
-                      delay:  Duration(milliseconds: editAccountController.animationDuration),
-                      child: SizedBox(
-                        width: dimens.Dimens.emailContainerHeightSignUp,
-                        child: TextFormField(
-                          controller: editAccountController.searchCompanyName,
-                          keyboardType: TextInputType.url,
-                          cursorColor: Colors.grey,
-                          decoration: InputDecoration(
-                            filled: true, 
-                            fillColor: colors.AppColor.lightGrey,
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 0, color: colors.AppColor.lightGrey),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            hintText: 'Image Url',
-                            hintStyle: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-                          ),
-                          validator: (value){
-                              if(value!.isEmpty){
-                              return "Enter valid url";
-                            }else{
-                              return null;
-                            }
-                            
-                          },
-                        )
-                      )
-                    ),
+                      Space(Get.height * 0.03),
+                      DelayedDisplay(
+                          delay: Duration(
+                              milliseconds:
+                                  editAccountController.animationDuration),
+                          child: SizedBox(
+                              width: dimens.Dimens.emailContainerHeightSignUp,
+                              child: TextFormField(
+                                controller:
+                                    editAccountController.searchCompanyName,
+                                keyboardType: TextInputType.url,
+                                cursorColor: Colors.grey,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: colors.AppColor.lightGrey,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 0,
+                                        color: colors.AppColor.lightGrey),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  hintText: 'Image Url',
+                                  hintStyle: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12,
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                ),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Enter valid url";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ))),
                       Space(Get.height * 0.03),
                       titleWidget('Category'),
                       Space(Get.height * 0.01),
@@ -333,8 +321,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                         delay: Duration(
                             milliseconds:
                                 editAccountController.animationDuration),
-                        child:
-                            GetBuilder<EditAccountController>(builder: (_) {
+                        child: GetBuilder<EditAccountController>(builder: (_) {
                           return Padding(
                               padding: const EdgeInsets.only(left: 5),
                               child: Column(children: [
@@ -372,7 +359,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        'Use Master password to unlock ?',
+                                        'Use Biometric to unlock ?',
                                         style: GoogleFonts.poppins(
                                             color: colors.AppColor.accentColor,
                                             fontWeight: FontWeight.w400,
@@ -414,7 +401,6 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                                 if (formkey.currentState!.validate()) {
                                   dashboardController.updateVault(
                                       widget.vault, context);
-                                  
                                 }
                               },
                               borderRadius: BorderRadius.circular(20),
@@ -509,17 +495,16 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
   _buildShowTextField(int path) {
     return showTextInputDialog(context: context, textFields: [
       DialogTextField(
-          obscureText: editAccountController.getPassToggle,
-          hintText: 'Master Password',
-          validator: (value) {
-            
-            if (value!.isEmpty) {
-              return 'Please enter correct master password';
-            } else {
-              encryController.validateMasterPass(value, context, path, vault: widget.vault);
-            }
-          },
-          
+        obscureText: editAccountController.getPassToggle,
+        hintText: 'Master Password',
+        validator: (value) {
+          if (value!.isEmpty) {
+            return 'Please enter correct master password';
+          } else {
+            encryController.validateMasterPass(value, context, path,
+                vault: widget.vault);
+          }
+        },
       )
     ]);
   }

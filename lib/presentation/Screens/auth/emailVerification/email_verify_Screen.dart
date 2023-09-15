@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:lottie/lottie.dart';
-import '../../../../Controller/email_verify_controller.dart';
-import '../../../../Controller/login_controller.dart';
+import '../../../../controller/email_verify_controller.getx.dart';
+import '../../../../controller/login_controller.getx.dart';
 import '../../../Widget/space.dart';
 
 class VerifyEmailScreen extends StatefulWidget {

@@ -18,7 +18,5 @@ class LoginController extends GetxController{
     update();
   }
 
-  
-  
 
 }

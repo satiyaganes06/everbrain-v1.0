@@ -1,5 +1,5 @@
 import 'package:delayed_display/delayed_display.dart';
-import 'package:everbrain/Controller/signup_controller.dart';
+import 'package:everbrain/controller/signup_controller.getx.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/constants.dart' as constants;
 import 'package:everbrain/utils/dimensions.dart' as dimens;

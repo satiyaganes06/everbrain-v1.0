@@ -8,7 +8,7 @@ import 'package:everbrain/utils/dimensions.dart' as dimens;
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../../../Controller/signup_controller.dart';
+import '../../../../../controller/signup_controller.getx.dart';
 
 class MasterPasswordSignUp extends StatelessWidget {
   MasterPasswordSignUp({Key? key}) : super(key: key);

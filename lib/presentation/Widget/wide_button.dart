@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 
-import '../../Controller/login_controller.dart';
+import '../../controller/login_controller.getx.dart';
 
 class WideButton extends StatelessWidget {
   String title;
