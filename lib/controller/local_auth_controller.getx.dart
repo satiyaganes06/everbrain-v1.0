@@ -10,12 +10,16 @@ import 'login_controller.getx.dart';
 class LocalAuthController extends GetxController{
   String passcode = '';
   String userID = '';
-
+  var id;
+  String email = '';
   Rx<bool> isUnlock = false.obs;
   final passcodeController = TextEditingController();
 
   @override
   onInit() async{
+    id = await GetIt.I.get<LocalStorageSecure>().getString('userID');
+    email = await GetIt.I.get<LocalStorageSecure>().getString(KY.KYS.emailKey + id.toString()) ?? '';
+    update(['email_string']);
     await getPasscode();
     super.onInit();
   }

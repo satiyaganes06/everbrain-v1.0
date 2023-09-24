@@ -2,6 +2,7 @@
 class KYS{
   //Keys
   static String masterPasswordKey = 'XoxoMasterPassword';
+  static String emailKey = 'XoxsssoEmailPassword';
   static String isBiometric = 'XoxoBiometric';
   static String isPasscode = 'jHgSPasscode';
   static String passcodeKey = 'Xoxxs322';

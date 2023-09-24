@@ -53,19 +53,19 @@ class CustomAppBar extends StatelessWidget {
       centerTitle: true,
       backgroundColor: colors.AppColor.primaryColor,
       elevation: 1,
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.more_vert_rounded),
-          iconSize: 25,
-          splashRadius: 20,
-          color: colors.AppColor.secondaryColor,
-          onPressed: () {
+      // actions: [
+      //   IconButton(
+      //     icon: const Icon(Icons.more_vert_rounded),
+      //     iconSize: 25,
+      //     splashRadius: 20,
+      //     color: colors.AppColor.secondaryColor,
+      //     onPressed: () {
             
-            _showBottomSheet(context);
+      //       _showBottomSheet(context);
            
-          },
-        )
-      ],
+      //     },
+      //   )
+     // ],
     );
   }
 

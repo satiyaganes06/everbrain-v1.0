@@ -9,6 +9,7 @@ import 'package:iconsax/iconsax.dart';
 class CommonAppbar extends StatelessWidget implements PreferredSizeWidget{
   String title;
   bool isActionBtnEnable = false;
+  bool isBackBtnEnable = true;
   Icon? icon;
   Function? actionBtnFunction = () {};
 
@@ -18,12 +19,13 @@ class CommonAppbar extends StatelessWidget implements PreferredSizeWidget{
     this.isActionBtnEnable = false,
     this.icon,
     this.actionBtnFunction,
+    this.isBackBtnEnable = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-        leading: IconButton(
+        leading: isBackBtnEnable ? IconButton(
           icon: GetPlatform.isAndroid
               ? const Icon(Icons.arrow_back)
               : const Icon(Icons.arrow_back_ios_new),
@@ -32,7 +34,7 @@ class CommonAppbar extends StatelessWidget implements PreferredSizeWidget{
           },
           color: colors.AppColor.secondaryColor,
           splashRadius: 20,
-        ),
+        ) : null,
         backgroundColor: colors.AppColor.primaryColor,
         elevation: 0.5,
         title: Text(

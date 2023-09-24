@@ -1,6 +1,7 @@
 
 import 'package:everbrain/controller/add_new_account_controller.getx.dart';
 import 'package:everbrain/controller/edit_account_controller.getx.dart';
+import 'package:everbrain/presentation/Screens/main_screen/main_screen.dart';
 import 'package:everbrain/presentation/Widget/global_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -59,7 +60,7 @@ class HiveController extends GetxController{
         duration: const Duration(seconds: 1),
       ));
 
-      Get.offAll(const DashboardScreen());
+      Get.offAll(const MainScreen());
     
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -71,7 +72,6 @@ class HiveController extends GetxController{
   }
 
   Future<void> updateVaultPassword(String vaultKey, String vaultPassword, BuildContext context) async{
-
 
     try {
       await _hiveVaultPassService.updateVaultPass(valuePasswordKYS: vaultKey, vaultPass: vaultPassword);
@@ -89,20 +89,17 @@ class HiveController extends GetxController{
 
   Future<void> getListVault() async {
     vaultList.value =  await _hiveVaultService.getVaultList();
-    vaultList.sort((a, b) {
-      if (a.isFavourite && !b.isFavourite) {
-        return -1;
-      } else if (!a.isFavourite && b.isFavourite) {
-        return 1; 
-      } else {
-        return 0; 
-      }
-    });
+    // vaultList.sort((a, b) {
+    //   if (a.isFavourite && !b.isFavourite) {
+    //     return -1;
+    //   } else if (!a.isFavourite && b.isFavourite) {
+    //     return 1; 
+    //   } else {
+    //     return 0; 
+    //   }
+    // });
 
-    print(vaultList.length);
-   // update(['list_of_vault']);
   }
-
   
   searchListVault(String value) async{
     if(value != ''){
@@ -114,10 +111,14 @@ class HiveController extends GetxController{
     }
   }
 
-  
-
   filterList(String value) async{
-    if(value != 'All'){
+
+    if(value == 'favourite'){
+      await getListVault();
+      vaultList.value = vaultList.value.where((vault) => vault.isFavourite == true).toList();
+      
+    }
+    else if(value != 'All'){
       await getListVault();
       vaultList.value = vaultList.value.where((vault) => vault.vaultCategory == value).toList();
     //  update(['list_of_vault']);

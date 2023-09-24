@@ -2,6 +2,7 @@
 import 'package:everbrain/Model/vault_password_model.dart';
 import 'package:everbrain/controller/edit_account_controller.getx.dart';
 import 'package:everbrain/controller/local_auth_controller.getx.dart';
+import 'package:everbrain/presentation/Screens/main_screen/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -25,6 +26,26 @@ class FlutterEncryController extends GetxController{
   static const _optDelete = KY.KYS.optDelete;
   static const _optCopy = KY.KYS.optCopy;
   static const _optUnlock = KY.KYS.optUnlock;
+
+  Future<LocalStorageResult> userEmailStore(String email, String userID) async{
+    var result;
+
+    try {
+      var result = await GetIt.I.get<LocalStorageSecure>().saveString(
+        KY.KYS.emailKey + userID, email
+      );
+
+      debugPrint(result.toString());
+
+      return result;
+
+    } catch (e) {
+
+      debugPrint(e.toString());
+
+      return result;
+    }
+  }
 
   Future<LocalStorageResult> masterPassStore(String pass, String userID) async{
     var result;
@@ -98,7 +119,7 @@ class FlutterEncryController extends GetxController{
         case _optUnlock:
           Get.find<LocalAuthController>().isUnlock.value = true;
           await Future.delayed(const Duration(seconds: 1)); 
-          Get.off(() => const DashboardScreen());
+          Get.off(() => const MainScreen());
           Get.find<LocalAuthController>().passcodeController.clear();
           await Future.delayed(const Duration(seconds: 1)); 
           Get.find<LocalAuthController>().isUnlock.value = false;
@@ -147,7 +168,7 @@ class FlutterEncryController extends GetxController{
             websiteUrl: '')),
             context
           );
-          Get.offAll(const DashboardScreen());
+          Get.offAll(const MainScreen());
           break;
         default:
       } 
@@ -166,7 +187,7 @@ class FlutterEncryController extends GetxController{
     if(Get.find<LocalAuthController>().passcode == value){     
       Get.find<LocalAuthController>().isUnlock.value = true;
       await Future.delayed(const Duration(seconds: 1)); 
-      Get.off(() => const DashboardScreen());
+      Get.off(() => const MainScreen());
       Get.find<LocalAuthController>().passcodeController.clear();
       await Future.delayed(const Duration(seconds: 1)); 
       Get.find<LocalAuthController>().isUnlock.value = false;
@@ -181,7 +202,7 @@ class FlutterEncryController extends GetxController{
         case _optUnlock:
           Get.find<LocalAuthController>().isUnlock.value = true;
           await Future.delayed(const Duration(seconds: 1)); 
-          Get.off(() => const DashboardScreen());
+          Get.off(() => const MainScreen());
           Get.find<LocalAuthController>().passcodeController.clear();
           await Future.delayed(const Duration(seconds: 1)); 
           Get.find<LocalAuthController>().isUnlock.value = false;
@@ -231,7 +252,7 @@ class FlutterEncryController extends GetxController{
           );
 
           hiveCtrl.deleteVaultPass(vault!.vaultID, context);
-          Get.offAll(const DashboardScreen());
+          Get.offAll(const MainScreen());
           break;
         default:
       } 

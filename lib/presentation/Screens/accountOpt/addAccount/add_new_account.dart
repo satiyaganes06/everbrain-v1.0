@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:auto_animated/auto_animated.dart';
 import 'package:delayed_display/delayed_display.dart';
+import 'package:everbrain/presentation/Screens/main_screen/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
@@ -310,7 +311,7 @@ class _AddNewAccountState extends State<AddNewAccount> {
                                 if (formkey.currentState!.validate()) {
                                   addNewAccountController.addAccountFun();
 
-                                  Get.offAll(const DashboardScreen());
+                                  Get.offAll(const MainScreen());
                                 }
                               },
                               borderRadius: BorderRadius.circular(20),
@@ -374,16 +375,17 @@ class _AddNewAccountState extends State<AddNewAccount> {
 
   Widget _buildCategoriesButtons() {
     return SizedBox(
-        height: Get.height * 0.15,
+        height: Get.height * 0.06,
         child: LiveGrid.options(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           options: dashboardController.options,
           itemBuilder: _buildAnimatedCategoryButton,
           itemCount: 6,
           scrollDirection: Axis.horizontal,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 1,
             mainAxisSpacing: 1,
+            mainAxisExtent: Get.width*0.4
           ),
           physics: const BouncingScrollPhysics(),
         ));

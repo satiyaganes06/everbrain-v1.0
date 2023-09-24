@@ -33,6 +33,7 @@ class PasswordItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         child: InkWell(
           onTap: (){
+            
             Get.to(() => ViewVaultScreen(vault: vaultInfo));
           },
           borderRadius: BorderRadius.circular(10),
@@ -40,7 +41,7 @@ class PasswordItem extends StatelessWidget {
             tileColor: colors.AppColor.secondaryColor,
             leading: OctoImage.fromSet(
                   width: Get.height*0.06,
-                  image: CachedNetworkImageProvider(vaultInfo.websiteImageUrl, cacheKey: vaultInfo.vaultID, cacheManager: customCacheManager),
+                  image: CachedNetworkImageProvider(vaultInfo.websiteImageUrl, cacheManager: customCacheManager),
                   octoSet: OctoSet.circleAvatar(
                     backgroundColor: colors.AppColor.secondaryColor, text: Center(child: CircularProgressIndicator(color: colors.AppColor.accentColor,),),
                   ),
@@ -83,6 +84,7 @@ class PasswordItem extends StatelessWidget {
                         child: IconButton(
                           onPressed: () async{
                             var pss = await hiveController.getVaultPassword(vaultInfo.vaultID);
+                            Get.lazyPut(()=>EditAccountController());
                             Get.find<EditAccountController>().funPasswordCopy(context, password: pss);
                           },
                           color: colors.AppColor.tertiaryColor,

@@ -351,50 +351,55 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
     int index,
     Animation<double> animation,
   ) =>
-      FadeTransition(
-          opacity: Tween<double>(
-            begin: 0,
-            end: 1,
-          ).animate(animation),
-          // And slide transition
-          child: SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0, -0.1),
-                end: Offset.zero,
-              ).animate(animation),
-              child: Obx(() {
-                return Material(
-                    color: Get.find<EditAccountController>()
-                                .category_Selector_List
-                                .value[index] ==
-                            false
-                        ? Colors.white
-                        : Colors.grey[200],
-                    borderRadius: BorderRadius.circular(10),
-                    child: InkWell(
+     FadeTransition(
+            opacity: Tween<double>(
+              begin: 0,
+              end: 1,
+            ).animate(animation),
+            // And slide transition
+            child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, -0.1),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: Obx(() {
+                  return Container(
+                    width: Get.width * 0.2,
+                    child: Material(
+                        color: Get.find<EditAccountController>()
+                                    .category_Selector_List
+                                    .value[index] ==
+                                false
+                            ? Colors.white
+                            : Colors.grey[200],
                         borderRadius: BorderRadius.circular(10),
-                        onTap: () {
-                          Get.find<EditAccountController>().filterToggle(index);
-                        },
-                        child: CategoryButton(
-                            Get.find<EditAccountController>()
-                                .category_Button_Image_Path[index],
-                            Get.find<EditAccountController>()
-                                .category_Button_Image_title[index])));
-              })));
+                        child: InkWell(
+                            borderRadius: BorderRadius.circular(10),
+                            onTap: () {
+                              Get.find<EditAccountController>().filterToggle(index);
+                            },
+                            child: CategoryButton(
+                                Get.find<EditAccountController>()
+                                    .category_Button_Image_Path[index],
+                                Get.find<EditAccountController>()
+                                    .category_Button_Image_title[index]))),
+                  );
+                })),
+      );
 
   Widget _buildCategoriesButtons() {
     return SizedBox(
-        height: Get.height * 0.15,
+        height: Get.height * 0.06,
         child: LiveGrid.options(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           options: Get.find<DashboardController>().options,
           itemBuilder: _buildAnimatedCategoryButton,
-          itemCount: 6,
+          itemCount: editAccountController.category_Button_Image_title.length,
           scrollDirection: Axis.horizontal,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 1,
             mainAxisSpacing: 1,
+            mainAxisExtent: Get.width * 0.40,
           ),
           physics: const BouncingScrollPhysics(),
         ));

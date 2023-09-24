@@ -3,7 +3,6 @@ import 'package:everbrain/presentation/Screens/auth/emailVerification/email_veri
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-
 import '../../../controller/email_verify_controller.getx.dart';
 import '../../../controller/login_controller.getx.dart';
 import '../../../controller/setting_controller.getx.dart';

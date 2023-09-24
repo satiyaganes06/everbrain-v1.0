@@ -8,17 +8,10 @@ import 'package:everbrain/presentation/Widget/passwords_item.dart';
 import 'package:flutter/material.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:get/get.dart';
-import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../controller/hive_controller.getx.dart';
 import '../../../controller/login_controller.getx.dart';
-import '../../../core/localServices/secure_storage_repository.dart';
-import '../../../core/networkService/brand_api_service.dart';
 import '../../Widget/custom_appbar.dart';
-import '../accountOpt/addAccount/add_new_account.dart';
-import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
-
-import '../passwordGenerator/password_generator_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -48,11 +41,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       CustomAppBar(),
 
                       buildSearchBar(context),
-
                       //    buildTitle("Categories"),
+                      SliverToBoxAdapter(child: SizedBox(height: Get.height*0.01,),),
                       buildCategoriesButtons(),
-                      buildTitle('Passwords'),
+                     // buildTitle('Passwords'),
+                     SliverToBoxAdapter(child: SizedBox(height: Get.height*0.02,),),
                       buildPasswordList(context),
+
+                      
                     ]))),
         floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
         floatingActionButton: FloatingActionButton(
@@ -77,20 +73,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget buildCategoriesButtons() {
     return SliverToBoxAdapter(
-        child: SizedBox(
-            height: Get.height * 0.15,
-            child: LiveGrid.options(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              options: dashboardController.options,
-              itemBuilder: buildAnimatedCategoryButton,
-              itemCount: 7,
-              scrollDirection: Axis.horizontal,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
-                mainAxisSpacing: 1,
-              ),
-              physics: const BouncingScrollPhysics(),
-            )));
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: SizedBox(
+            height: Get.height * 0.06,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                itemCount: dashboardController.category_Button_Image_Path.length,
+                itemBuilder: (context, index) {
+                  return Obx(() {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 5),
+                      child: Material(
+                          color: dashboardController
+                                      .category_Selector_List.value[index] ==
+                                  false
+                              ? Colors.white
+                              : Colors.grey[200],
+                          borderRadius: BorderRadius.circular(10),
+                          child: InkWell(
+                              borderRadius: BorderRadius.circular(10),
+                              splashColor: Colors.grey[200],
+                              onTap: () {
+                                dashboardController.colorChange(index);
+                              },
+                              child: CategoryButton(
+                                  dashboardController
+                                      .category_Button_Image_Path[index],
+                                  dashboardController
+                                      .category_Button_Image_title[index]))),
+                    );
+                  });
+                }),
+          ),
+        ));
   }
 
   Widget buildPasswordList(BuildContext context) {
@@ -117,42 +134,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ));
   }
 
-  Widget buildAnimatedCategoryButton(
-    BuildContext context,
-    int index,
-    Animation<double> animation,
-  ) =>
-      FadeTransition(
-          opacity: Tween<double>(
-            begin: 0,
-            end: 1,
-          ).animate(animation),
-          // And slide transition
-          child: SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0, -0.1),
-                end: Offset.zero,
-              ).animate(animation),
-              child: Obx(() {
-                return Material(
-                    color: dashboardController
-                                .category_Selector_List.value[index] ==
-                            false
-                        ? Colors.white
-                        : Colors.grey[200],
-                    borderRadius: BorderRadius.circular(10),
-                    child: InkWell(
-                        borderRadius: BorderRadius.circular(10),
-                        splashColor: Colors.grey[200],
-                        onTap: () {
-                          dashboardController.colorChange(index);
-                        },
-                        child: CategoryButton(
-                            dashboardController
-                                .category_Button_Image_Path[index],
-                            dashboardController
-                                .category_Button_Image_title[index])));
-              })));
+  // Widget buildAnimatedCategoryButton(
+  //   BuildContext context,
+  //   int index,
+  //   Animation<double> animation,
+  // ) =>
+  //     FadeTransition(
+  //         opacity: Tween<double>(
+  //           begin: 0,
+  //           end: 1,
+  //         ).animate(animation),
+  //         // And slide transition
+  //         child: SlideTransition(
+  //             position: Tween<Offset>(
+  //               begin: const Offset(0, -0.1),
+  //               end: Offset.zero,
+  //             ).animate(animation),
+  //             child: ));
 
   Widget buildAnimatedPasswordList(
       BuildContext context, int index, Animation<double> animation) {

@@ -103,4 +103,10 @@ class Vault extends HiveObject {
 
   factory Vault.fromJson(String source) => Vault.fromMap(json.decode(source) as Map<String, dynamic>);
 
+  @override
+  String toString() {
+    return 'Vault(userID: $userID, vaultID: $vaultID, username: $username, websiteImageUrl: $websiteImageUrl, vaultName: $vaultName, websiteUrl: $websiteUrl, vaultCategory: $vaultCategory, isFavourite: $isFavourite, isBiometricUnlock: $isBiometricUnlock)';
+   
+  }
+
 }

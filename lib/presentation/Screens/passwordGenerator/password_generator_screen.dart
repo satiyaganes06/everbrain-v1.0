@@ -2,14 +2,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:everbrain/presentation/Widget/space.dart';
 import 'package:flutter/material.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
-import 'package:flutter/services.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:pinput/pinput.dart';
-import 'package:vibration/vibration.dart';
 import '../../../controller/password_generator.getx.dart';
 import '../../Widget/appbar.dart';
 import '../../Widget/global_widget.dart';
@@ -24,6 +19,7 @@ class PasswordGeneratorScreen extends StatelessWidget {
       appBar: CommonAppbar(
         title: 'Password Generator',
         isActionBtnEnable: false,
+        isBackBtnEnable: false,
       ),
       body: SingleChildScrollView(
           child: Column(

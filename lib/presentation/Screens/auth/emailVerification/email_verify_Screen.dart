@@ -1,5 +1,6 @@
 import 'package:delayed_display/delayed_display.dart';
 import 'package:everbrain/presentation/Screens/dashboard/dashboard_Screen.dart';
+import 'package:everbrain/presentation/Screens/main_screen/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,7 +32,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   Widget build(BuildContext context) {
     
     return Obx((){
-      return emailVerifyController.isEmailVerified.value ? const DashboardScreen() : verifyScreen();
+      return emailVerifyController.isEmailVerified.value ? const MainScreen() : verifyScreen();
     });
   }
 

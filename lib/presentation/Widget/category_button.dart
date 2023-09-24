@@ -14,11 +14,13 @@ class CategoryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
+        SizedBox(width: 10,),
+
         Container(
-          height:Get.height*0.08,
+          width: Get.width*0.08,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             boxShadow: [
@@ -38,14 +40,23 @@ class CategoryButton extends StatelessWidget {
               imageBuilder: OctoImageTransformer.circleAvatar(),
           )
         ),
-          Text(category_Button_Title.toString(),
-          style: GoogleFonts.poppins(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: colors.AppColor.accentColor
+
+        const SizedBox(width: 7,),
+
+        SizedBox(
+          
+          child: Text(category_Button_Title.toString(),
+          maxLines: 1,
+            style: GoogleFonts.poppins(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: colors.AppColor.accentColor
+            ),
+            overflow: TextOverflow.fade,  
           ),
-          overflow: TextOverflow.fade,  
         ),
+
+        SizedBox(width: 10,),
         
       ],
     );

@@ -30,11 +30,13 @@ class SettingController extends GetxController {
       if (await LocalAuth.hasBiometrics()) {
         currentBiometricOption.value = option;
 
-        
-
         GetIt.I
             .get<LocalStorageSecure>()
             .saveString(KY.KYS.isBiometric +  userID, currentBiometricOption.value);
+
+        GetIt.I
+          .get<LocalStorageSecure>()
+          .saveString(KY.KYS.isBiometric + userID, currentBiometricOption.value);
 
         Navigator.pop(context);
       } else {

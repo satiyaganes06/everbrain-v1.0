@@ -11,6 +11,7 @@ import 'package:everbrain/utils/dimensions.dart' as dimens;
 import '../../../controller/login_controller.getx.dart';
 import '../../Widget/appbar.dart';
 import '../../Widget/subtitle_font copy.dart';
+import '../masterPasswordReq/master_password_hint_Screen.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
@@ -20,7 +21,7 @@ class SettingScreen extends StatelessWidget {
     final settingController = Get.find<SettingController>();
 
     return Scaffold(
-        appBar: CommonAppbar(title: "Settings"),
+        appBar: CommonAppbar(title: "Settings", isBackBtnEnable: false,),
         body: ListView(
             scrollDirection: Axis.vertical,
             physics: const BouncingScrollPhysics(),
@@ -113,6 +114,23 @@ class SettingScreen extends StatelessWidget {
                           settingController.settingOption[0]
                       ? _showBottomSheetPasscode(context, settingController)
                       : settingController.setPasscodeOption('', 'off', context);
+                },
+              ),
+
+              ListTile(
+                leading: Icon(
+                  Icons.hive_outlined,
+                  size: 20,
+                  color: colors.AppColor.tertiaryColor,
+                ),
+                title: Text("Get Master Password Hints",
+                    style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: colors.AppColor.tertiaryColor)),
+                
+                onTap: () {
+                  Get.to(()=> PasswordHintScreen());
                 },
               ),
 

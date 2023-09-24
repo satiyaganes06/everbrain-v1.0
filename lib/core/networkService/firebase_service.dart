@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:everbrain/presentation/Screens/auth/login/loginScreen.dart';
 import 'package:everbrain/presentation/Screens/dashboard/dashboard_Screen.dart';
+import 'package:everbrain/presentation/Screens/main_screen/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -46,15 +47,21 @@ class FirebaseService {
           .createUserWithEmailAndPassword(email: _email, password: _password)
           .then((value) async{
         
-        createUser(_firebaseAuth.currentUser!.uid, _email, passwordHints, isAgree);
+        var userID = _firebaseAuth.currentUser!.uid;
+        
+        createUser(userID, _email, passwordHints, isAgree);
 
         Get.lazyPut(() => FlutterEncryController());
 
         var resultKey = await Get.find<FlutterEncryController>().masterPassStore(
-            _password, _firebaseAuth.currentUser!.uid);
+            _password, userID);
 
-        if (resultKey == LocalStorageResult.saved) {
-          print(resultKey);
+        var resultEmailKey = await Get.find<FlutterEncryController>()
+            .userEmailStore(_email, userID);
+
+        if (resultKey == LocalStorageResult.saved
+            && resultEmailKey == LocalStorageResult.saved) {
+              
           Get.off(const VerifyEmailScreen());
 
         } else {
@@ -95,17 +102,21 @@ class FirebaseService {
 
         currentUserID();
 
-        var resultKey = await encryController.masterPassStore(
+        var resultPassKey = await encryController.masterPassStore(
             password, userID);
 
-        if (resultKey == LocalStorageResult.saved) {
+        var resultEmailKey = await encryController.userEmailStore(
+            email, userID);
+
+        if (resultPassKey == LocalStorageResult.saved &&
+            resultEmailKey == LocalStorageResult.saved) {
           loginController.email_field.clear();
           loginController.password_field.clear();
           
           var status = await currentUserEmailVerifiedStatus();
 
           if(status == true){
-            Get.offAll(const DashboardScreen());
+            Get.offAll(const MainScreen());
 
           }else{
             Get.offAll(const VerifyEmailScreen());
