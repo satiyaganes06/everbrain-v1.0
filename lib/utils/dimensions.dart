@@ -6,6 +6,9 @@ class Dimens{
   static double masterPasswordIconSize = 20;
   static double masterPasswordIconSplashRadius = 20;
   static int snackMessageDuration= 2;
+  static double textFormFieldFontSize = 14;
+  static double textFieldContentHorizontalPaddingSignUp = 10;
+  static double textFieldContentVerticalPaddingSignUp = 5;
 
   //Sign-Up
   static double overallPagePaddingSignUp = 20;
@@ -76,5 +79,4 @@ class Dimens{
   static double notAmemberSubtextFontSize = 12;
   static double notAmemberButtonFontSize = 12;
 
-  
 }

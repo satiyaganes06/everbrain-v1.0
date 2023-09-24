@@ -9,7 +9,6 @@ import 'secure_storage_repository.dart';
 class LocalStorageSecureImpl extends LocalStorageSecure {
   FlutterSecureStorage? storage;
   
-
   @override
   Future<void> init() async {
     AndroidOptions getAndroidOptions() => AndroidOptions(
@@ -27,8 +26,6 @@ class LocalStorageSecureImpl extends LocalStorageSecure {
         aOptions: getAndroidOptions(), iOptions: getIOSOptions());
   }
 
- 
-
   @override
   Future<LocalStorageResult> saveString(String key, String value) async {
     if (storage == null) await init();
@@ -39,8 +36,6 @@ class LocalStorageSecureImpl extends LocalStorageSecure {
       return LocalStorageResult.failed;
     }
   }
-
-
 
   @override
   Future<String?> getString(String key) async {
@@ -66,7 +61,7 @@ class LocalStorageSecureImpl extends LocalStorageSecure {
   }
   
   @override
-  Future<Uint8List> secureInitHive() async{
+  Future<Uint8List> secureInitHiveVault() async{
 
     if (storage == null) await init();
 
@@ -91,4 +86,33 @@ class LocalStorageSecureImpl extends LocalStorageSecure {
       return Uint8List(1);
     }
   }
+
+  @override
+  Future<Uint8List> secureInitHiveVaultPass() async{
+
+    if (storage == null) await init();
+
+    try {
+      final encryptionKey = await storage?.read(key: KY.KYS.hivePassKY);
+
+      if (encryptionKey == null) {
+        final key = Hive.generateSecureKey();
+        await storage?.write(
+          key: KY.KYS.hivePassKY,
+          value: base64UrlEncode(key),
+        );
+      }
+
+      final encryptionKey2 = await storage?.read(key: KY.KYS.hivePassKY);
+      final encryptionKeyConfirm = base64Url.decode(encryptionKey2!);
+      
+      //await storage?.write(key: key, value: );
+      return encryptionKeyConfirm;
+    } catch (e) {
+
+      return Uint8List(1);
+    }
+  }
 }
+
+

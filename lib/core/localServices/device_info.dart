@@ -13,7 +13,7 @@ class DeviceInfo{
   Future<void> init() async{
 
     deviceOs = Platform.operatingSystem;
-    await getIPAddress();
+   // await getIPAddress();
 
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await device.androidInfo;
@@ -27,16 +27,16 @@ class DeviceInfo{
     }
   }
 
-  Future getIPAddress() async{
-   try {
-      final url = Uri.parse('https://api.ipify.org/');
-      final response = await http.get(url);
+  // Future getIPAddress() async{
+  //  try {
+  //     final url = Uri.parse('https://api.ipify.org/');
+  //     final response = await http.get(url);
 
-      deviceIP = response.body;
+  //     deviceIP = response.body;
 
-   } catch (e) {
-      debugPrint(e.toString());
-      deviceIP = '';
-   }
-  }
+  //  } catch (e) {
+  //     debugPrint(e.toString());
+  //     deviceIP = '';
+  //  }
+  // }
 }

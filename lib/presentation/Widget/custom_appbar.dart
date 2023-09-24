@@ -1,12 +1,15 @@
 
+import 'package:everbrain/presentation/Screens/passwordGenerator/password_generator_screen.dart';
 import 'package:everbrain/presentation/Screens/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:iconsax/iconsax.dart';
 import '../../controller/login_controller.getx.dart';
 import '../../core/localServices/device_info.dart';
+import '../Screens/auth/local_auth/local_auth_screen.dart';
 import '../Screens/masterPasswordReq/master_password_hint_Screen.dart';
 
 class CustomAppBar extends StatelessWidget {
@@ -74,24 +77,7 @@ class CustomAppBar extends StatelessWidget {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              ListTile(
-                leading: Icon(
-                  Icons.settings_rounded,
-                  color: colors.AppColor.tertiaryColor,
-                ),
-                title: Text(
-                  'Settings',
-                  style: GoogleFonts.poppins(
-                      color: colors.AppColor.tertiaryColor,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  Get.to(const SettingScreen());
-                  
-                },
-              ),
+
               ListTile(
                 leading: Icon(
                   Icons.password_rounded,
@@ -106,25 +92,63 @@ class CustomAppBar extends StatelessWidget {
                 ),
                 onTap: () {
                   Navigator.pop(context);
-                  Get.to(PasswordHintScreen());
+                  Get.to(()=> PasswordHintScreen());
                   
                 },
               ),
+
               ListTile(
                 leading: Icon(
-                  Icons.logout_rounded,
-                  color: colors.AppColor.fail,
+                  Iconsax.password_check,
+                  color: colors.AppColor.tertiaryColor,
                 ),
                 title: Text(
-                  'Logout',
+                  'Password Generator',
+                  style: GoogleFonts.poppins(
+                      color: colors.AppColor.tertiaryColor,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  Get.to(() => const PasswordGeneratorScreen());
+                  
+                },
+              ),
+
+              ListTile(
+                leading: Icon(
+                  Icons.settings_rounded,
+                  color: colors.AppColor.tertiaryColor,
+                ),
+                title: Text(
+                  'Settings',
+                  style: GoogleFonts.poppins(
+                      color: colors.AppColor.tertiaryColor,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  Get.to(() => const SettingScreen());
+                  
+                },
+              ),
+              
+              ListTile(
+                leading: Icon(
+                  Icons.lock,
+                  color: colors.AppColor.tertiaryColor,
+                ),
+                title: Text(
+                  'Lock now',
                   style: GoogleFonts.poppins(
                       color: colors.AppColor.tertiaryColor,
                       fontWeight: FontWeight.w500,
                       fontSize: 14,),
                 ),
                 onTap: () {
-                  Navigator.pop(context);
-                  loginController.firebaseService.signOut();
+                  Get.offAll(() => LocalAuthScreen());
                 },
               ),
             ],

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'Model/vault_model.dart';
+import 'Model/vault_password_model.dart';
 import 'presentation/Screens/auth/SplashScreen.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'main_module.dart';
@@ -27,6 +28,7 @@ Future<void> main() async {
   MainModule.init();
   await Hive.initFlutter();
   Hive.registerAdapter(VaultAdapter());
+  Hive.registerAdapter(VaultPasswordAdapter());
 
   runApp(const MyApp());
 }

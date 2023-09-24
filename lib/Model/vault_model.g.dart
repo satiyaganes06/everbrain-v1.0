@@ -19,41 +19,38 @@ class VaultAdapter extends TypeAdapter<Vault> {
     return Vault(
       userID: fields[0] as String,
       vaultID: fields[1] as String,
-      sourceName: fields[2] as String,
-      sourceImageUrl: fields[9] as String,
+      username: fields[12] as String,
+      websiteImageUrl: fields[13] as String,
       vaultName: fields[3] as String,
-      vaultPassword: fields[4] as String,
-      hintPassword: fields[5] as String,
+      websiteUrl: fields[10] as String,
       vaultCategory: fields[6] as String,
       isFavourite: fields[7] as bool,
-      isMPUnlock: fields[8] as bool,
+      isBiometricUnlock: fields[11] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, Vault obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.userID)
       ..writeByte(1)
       ..write(obj.vaultID)
-      ..writeByte(2)
-      ..write(obj.sourceName)
-      ..writeByte(9)
-      ..write(obj.sourceImageUrl)
+      ..writeByte(12)
+      ..write(obj.username)
       ..writeByte(3)
       ..write(obj.vaultName)
-      ..writeByte(4)
-      ..write(obj.vaultPassword)
-      ..writeByte(5)
-      ..write(obj.hintPassword)
+      ..writeByte(10)
+      ..write(obj.websiteUrl)
+      ..writeByte(13)
+      ..write(obj.websiteImageUrl)
       ..writeByte(6)
       ..write(obj.vaultCategory)
       ..writeByte(7)
       ..write(obj.isFavourite)
-      ..writeByte(8)
-      ..write(obj.isMPUnlock);
+      ..writeByte(11)
+      ..write(obj.isBiometricUnlock);
   }
 
   @override

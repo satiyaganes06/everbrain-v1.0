@@ -1,24 +1,34 @@
-
 import 'package:everbrain/Model/vault_model.dart';
+import 'package:everbrain/controller/hive_controller.getx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 
+import '../Model/vault_password_model.dart';
 import '../core/localServices/local_auth.dart';
 
-class EditAccountController extends GetxController{
-  TextEditingController searchCompanyName = TextEditingController();
-  TextEditingController companyName = TextEditingController();
-  TextEditingController emailRusernameRphone = TextEditingController();
-  TextEditingController password = TextEditingController();
-  TextEditingController hintPassword = TextEditingController();
-  bool _passwordToggle = true;
-  bool isFavourite = false;
-  bool isReMpassNeeded = false;
-  int animationDuration = 100;
+class EditAccountController extends GetxController {
+  //View
+  TextEditingController vaultNameCtrl = TextEditingController();
+  TextEditingController vaultUsernameCtrl = TextEditingController();
+  TextEditingController vaultPasswordCtrl = TextEditingController();
+  TextEditingController vaultWebsiteURLCtrl = TextEditingController();
 
-  bool get getPassToggle => _passwordToggle;
+  //Edit
+  TextEditingController vaultNameEditCtrl = TextEditingController();
+  TextEditingController vaultUsernameEditCtrl = TextEditingController();
+  TextEditingController vaultPasswordEditCtrl = TextEditingController();
+  TextEditingController vaultWebsiteURLEditCtrl = TextEditingController();
+
+  String? vaultWebsiteImageUrl = '';
+  bool _passwordViewToggle = true;
+  bool _passwordEditToggle = true;
+  bool isFavourite = false;
+  bool isBiometricEnable = false;
+
+  bool get getPassViewToggle => _passwordViewToggle;
+  bool get getPassEditToggle => _passwordEditToggle;
 
   var category_Selector_List = [false, false, false, false, false, false].obs;
   int current_index = 0;
@@ -41,13 +51,18 @@ class EditAccountController extends GetxController{
     'Others'
   ];
 
-  void funPasswordToggle() {
-    _passwordToggle = !_passwordToggle;
+  void funPasswordViewToggle() {
+    _passwordViewToggle = !_passwordViewToggle;
     update();
   }
 
-  void makePassTrue(){
-    _passwordToggle = true;
+  void funPasswordEditToggle() {
+    _passwordEditToggle = !_passwordEditToggle;
+    update();
+  }
+
+  void makePassTrue() {
+    _passwordEditToggle = true;
   }
 
   void filterToggle(int index) {
@@ -139,44 +154,66 @@ class EditAccountController extends GetxController{
     update();
   }
 
-  void reMpassNeededToggle() {
-    isReMpassNeeded = !isReMpassNeeded;
+  void isBiometricNeededToggle() {
+    isBiometricEnable = !isBiometricEnable;
     update();
   }
 
-  void funPasswordCopy(String password, BuildContext context) {
-    Clipboard.setData(ClipboardData(text: password))
-    .then((value) { //only if ->
-       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text("Copied"),
-        backgroundColor: colors.AppColor.tertiaryColor,
-        duration: const Duration(seconds: 1),
-      ));});
-    
+  void funPasswordCopy(BuildContext context, {String? password}) {
+    Clipboard.setData(ClipboardData(text: password ?? vaultPasswordCtrl.text))
+        .then((value) {
+      //only if ->
+      Get.snackbar(
+        'Password Copied',
+        'Password copied to clipboard',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: colors.AppColor.accentColor,
+        colorText: colors.AppColor.secondaryColor,
+        icon: Icon(
+          Icons.check_circle_outline_rounded,
+          color: colors.AppColor.secondaryColor,
+        ),
+        duration: const Duration(seconds: 3),
+        margin: const EdgeInsets.only(bottom: 20, right: 20, left: 20),
+      );
+    });
   }
 
-  void editSetup(Vault vault) {
-    searchCompanyName.text = vault.sourceImageUrl;
-    companyName.text  = vault.sourceName;
-    emailRusernameRphone.text  = vault.vaultName;
-    password.text  = vault.vaultPassword;
-    hintPassword.text  = vault.hintPassword;
+  void editSetup(Vault vault) async {
+    vaultNameEditCtrl.text = vault.vaultName;
+    vaultUsernameEditCtrl.text = vault.username;
+    vaultPasswordEditCtrl.text =
+        await Get.find<HiveController>().getVaultPassword(vault.vaultID);
+    vaultWebsiteURLEditCtrl.text = vault.websiteUrl;
+    vaultWebsiteImageUrl = vault.websiteImageUrl;
     isFavourite = vault.isFavourite;
-    isReMpassNeeded = vault.isMPUnlock;
+    isBiometricEnable = vault.isBiometricUnlock;
+    update();
     filterToggle(category_Button_Image_title.indexOf(vault.vaultCategory));
   }
 
-  Vault updateCopyWith(Vault vault){
+  Vault updatedVaultInfo(Vault vault) {
     return vault.copyWith(
-        sourceName: companyName.text,
-        sourceImageUrl: searchCompanyName.text,
-        vaultName: emailRusernameRphone.text,
-        vaultPassword: password.text,
-        hintPassword: hintPassword.text,
+        vaultName: vaultNameEditCtrl.text,
+        websiteImageUrl: vaultWebsiteImageUrl,
+        username: vaultUsernameEditCtrl.text,
+        websiteUrl: vaultWebsiteURLEditCtrl.text,
         vaultCategory: category_Button_Image_title[current_index].toString(),
         isFavourite: isFavourite,
-        isMPUnlock: isReMpassNeeded
-      );
+        isBiometricUnlock: isBiometricEnable);
   }
 
+  @override
+  void dispose() {
+    vaultNameCtrl.dispose();
+    vaultUsernameCtrl.dispose();
+    vaultPasswordCtrl.dispose();
+    vaultWebsiteURLCtrl.dispose();
+    vaultNameEditCtrl.dispose();
+    vaultUsernameEditCtrl.dispose();
+    vaultPasswordEditCtrl.dispose();
+    vaultWebsiteURLEditCtrl.dispose();
+
+    super.dispose();
+  }
 }

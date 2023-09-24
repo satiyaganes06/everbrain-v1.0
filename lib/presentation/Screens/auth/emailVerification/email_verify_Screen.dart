@@ -22,10 +22,14 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   final emailVerifyController = Get.find<EmailVerifyController>();
 
   @override
+  void initState() {
+    emailVerifyController.requestEmailVerificationFunction();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     
-    emailVerifyController.requestEmailVerificationFunction();
-
     return Obx((){
       return emailVerifyController.isEmailVerified.value ? const DashboardScreen() : verifyScreen();
     });

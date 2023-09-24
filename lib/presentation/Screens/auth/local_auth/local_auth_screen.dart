@@ -1,0 +1,260 @@
+import 'package:delayed_display/delayed_display.dart';
+import 'package:everbrain/controller/local_auth_controller.getx.dart';
+import 'package:everbrain/controller/setting_controller.getx.dart';
+import 'package:everbrain/presentation/Widget/space.dart';
+import 'package:everbrain/presentation/Widget/subtitle_font%20copy.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:everbrain/utils/colors.dart' as colors;
+import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:pinput/pinput.dart';
+import '../../../../controller/flutter_encry_controller.getx.dart';
+import 'package:everbrain/utils/constants.dart' as constants;
+import 'package:everbrain/utils/dimensions.dart' as dimens;
+import 'package:everbrain/utils/keys.dart' as KY;
+import '../../../../controller/login_controller.getx.dart';
+import '../../../Widget/wide_button.dart';
+
+class LocalAuthScreen extends StatelessWidget {
+  LocalAuthScreen({super.key});
+
+  final flutterEncryCon = Get.put(FlutterEncryController());
+  final settingContrl = Get.find<SettingController>();
+  
+
+  @override
+  Widget build(BuildContext context) {
+    final focusNode = FocusNode();
+    final formKey = GlobalKey<FormState>();
+
+    final focusedBorderColor = colors.AppColor.primaryColor;
+    final fillColor = colors.AppColor.primaryColor.withOpacity(0.3);
+    final borderColor = colors.AppColor.tertiaryColor;
+
+    Get.lazyPut(() => LocalAuthController());
+
+    final defaultPinTheme = PinTheme(
+      width: 56,
+      height: 56,
+      textStyle: const TextStyle(
+        fontSize: 22,
+        color: Color.fromRGBO(30, 60, 87, 1),
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(19),
+        border: Border.all(color: borderColor),
+      ),
+    );
+
+    return Scaffold(
+        body: SingleChildScrollView(
+      padding: EdgeInsets.all(dimens.Dimens.overallPagePaddingLogIn),
+      child: SizedBox(
+        width: double.infinity,
+        // color: Colors.amber,
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Space(Get.height * 0.1),
+              Obx(
+                () => Stack(children: [
+                  !Get.find<LocalAuthController>().isUnlock.value
+                      ? Icon(
+                          Icons.lock_rounded,
+                          size: 100,
+                          color: colors.AppColor.primaryColor,
+                        )
+                      : Icon(
+                          Icons.lock_open_rounded,
+                          size: 100,
+                          color: colors.AppColor.primaryColor,
+                        )
+                ]),
+              ),
+              Space(Get.height * 0.05),
+              SubtitleFont('Enter your pin to unlock'),
+              Space(Get.height * 0.05),
+              DelayedDisplay(
+                  delay: Duration(
+                      milliseconds: dimens.Dimens.delayAnimationLogInPage),
+                  child: Obx(() {
+                    debugPrint(settingContrl.currentPasscodeOption.value);
+                    if (settingContrl.currentPasscodeOption.value ==
+                        settingContrl.settingOption[1]) {
+                      return Directionality(
+                        textDirection: TextDirection.ltr,
+                        child: Pinput(
+                          controller: Get.find<LocalAuthController>().passcodeController,
+                          focusNode: focusNode,
+                          androidSmsAutofillMethod:
+                              AndroidSmsAutofillMethod.smsUserConsentApi,
+                          listenForMultipleSmsOnAndroid: true,
+                          defaultPinTheme: defaultPinTheme,
+                          separatorBuilder: (index) => const SizedBox(width: 8),
+                          validator: (value) {
+                            return value == Get.find<LocalAuthController>().passcode
+                                ? null
+                                : 'Pin is incorrect';
+                          },
+                          hapticFeedbackType: HapticFeedbackType.mediumImpact,
+                          onCompleted: (pin) {
+                            flutterEncryCon.validatePasscode(pin);
+                          },
+                          obscureText: true,
+                          obscuringWidget: Text(
+                            '●',
+                            style: TextStyle(
+                                color: colors.AppColor.accentColor),
+                          ),
+                          cursor: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 9),
+                                width: 22,
+                                height: 1,
+                                color: focusedBorderColor,
+                              ),
+                            ],
+                          ),
+                          focusedPinTheme: defaultPinTheme.copyWith(
+                            decoration: defaultPinTheme.decoration!.copyWith(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: focusedBorderColor),
+                            ),
+                          ),
+                          submittedPinTheme: defaultPinTheme.copyWith(
+                            decoration: defaultPinTheme.decoration!.copyWith(
+                              color: fillColor,
+                              borderRadius: BorderRadius.circular(19),
+                              border: Border.all(color: focusedBorderColor),
+                            ),
+                          ),
+                          errorPinTheme: defaultPinTheme.copyBorderWith(
+                            border: Border.all(color: Colors.redAccent),
+                          ),
+                        ),
+                      );
+                    } else if (settingContrl.currentPasscodeOption.value ==
+                        settingContrl.settingOption[0]) {
+                      return GetBuilder<LoginController>(dispose: (state) {
+                        state.controller?.password_field.clear();
+                      }, builder: (loginController) {
+                        return Column(children: [
+                          SizedBox(
+                            width: dimens
+                                .Dimens.masterPasswordContainerHeightLogIn,
+                            child: TextFormField(
+                              controller: loginController.password_field,
+                              keyboardType:
+                                  loginController.passwordToggle == false
+                                      ? TextInputType.visiblePassword
+                                      : TextInputType.emailAddress,
+                              obscureText: loginController.passwordToggle,
+                              cursorColor: colors.AppColor.primaryColor,
+                              textAlignVertical: TextAlignVertical.center,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: colors.AppColor.lightGrey,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 0,
+                                      color: colors.AppColor.lightGrey),
+                                  borderRadius: BorderRadius.circular(dimens
+                                      .Dimens
+                                      .masterPasswordContainerBorderLogIn),
+                                ),
+                                hintText: constants
+                                    .Constants.masterPasswordFieldLogIn,
+                                hintStyle: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize:
+                                      dimens.Dimens.masterPasswordFontSizeLogIn,
+                                ),
+                                contentPadding: EdgeInsets.only(
+                                    left: dimens.Dimens
+                                        .masterPasswordContentLeftPaddingLogIn),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    loginController.funPasswordToggle();
+                                  },
+                                  icon: loginController.passwordToggle == false
+                                      ? const Icon(
+                                          Icons.visibility_off_outlined)
+                                      : const Icon(Icons.visibility_outlined),
+                                  iconSize:
+                                      dimens.Dimens.masterPasswordIconSize,
+                                  splashRadius: dimens
+                                      .Dimens.masterPasswordIconSplashRadius,
+                                  color: loginController.passwordToggle == false
+                                      ? colors.AppColor.fail
+                                      : colors.AppColor.success,
+                                ),
+                              ),
+                              validator: (value) {
+                                
+                                if (value!.isEmpty) {
+                                  return constants
+                                      .Constants.masterPasswordFieldEmptyLogIn;
+                                } else {
+                                  
+                                  return null;
+                                  
+                                }
+                              },
+                            ),
+                          ),
+                          Space(Get.height * 0.05),
+                          WideButton('Unlock', () {
+                            flutterEncryCon.validateMasterPass(
+                                loginController.password_field.text,
+                                context,
+                                KY.KYS.optUnlock);
+                          }),
+                        ]);
+                      });
+                    } else {
+                      return const SizedBox();
+                    }
+                  })),
+              Space(Get.height * 0.05),
+              DelayedDisplay(
+                delay: Duration(
+                    milliseconds: dimens.Dimens.delayAnimationLogInPage),
+                child: GetBuilder<SettingController>(initState: (state) async {
+                  await state.controller?.getBiometricOption();
+                }, builder: (_) {
+                  return settingContrl.currentBiometricOption.value ==
+                          settingContrl.settingOption[1]
+                      ? GestureDetector(
+                          onTap: () {
+                            flutterEncryCon.biometricUnlock(
+                                optValue: KY.KYS.optUnlock,
+                                title: 'unlock',
+                                context: context);
+                          },
+                          child: Container(
+                            height: Get.height * 0.06,
+                            width: Get.height * 0.06,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: colors.AppColor.primaryColor,
+                            ),
+                            child: Icon(
+                              Iconsax.finger_scan,
+                              color: colors.AppColor.secondaryColor,
+                            ),
+                          ))
+                      : const SizedBox();
+                }),
+              )
+            ],
+          ),
+        ),
+      ),
+    ));
+  }
+}

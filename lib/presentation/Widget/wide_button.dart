@@ -10,7 +10,7 @@ import '../../controller/login_controller.getx.dart';
 
 class WideButton extends StatelessWidget {
   String title;
-  dynamic operation;
+  Function operation;
 
   final loginController = Get.find<LoginController>();
   
@@ -24,11 +24,7 @@ class WideButton extends StatelessWidget {
       shadowColor: Colors.grey[200],
       elevation: 6.1,
       child: InkWell(
-        onTap: (){
-          //loginController.firebaseService.signUp("satiyaganes@gmail.com", '123456', context);
-          operation;
-          Get.off(const DashboardScreen());
-        },
+        onTap: operation as void Function()? ?? (){},
         child: Container(
           width: double.infinity,
           height: 60,

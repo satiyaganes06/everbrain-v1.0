@@ -9,12 +9,14 @@ import 'package:iconsax/iconsax.dart';
 class CommonAppbar extends StatelessWidget implements PreferredSizeWidget{
   String title;
   bool isActionBtnEnable = false;
+  Icon? icon;
   Function? actionBtnFunction = () {};
 
   CommonAppbar({
     Key? key,
     required this.title,
     this.isActionBtnEnable = false,
+    this.icon,
     this.actionBtnFunction,
   }) : super(key: key);
 
@@ -44,7 +46,7 @@ class CommonAppbar extends StatelessWidget implements PreferredSizeWidget{
         actions: [
           if (isActionBtnEnable)
             IconButton(
-              icon: title == "Edit Account" ? const Icon(Iconsax.trash4) : const Icon(Icons.more_vert_rounded),
+              icon: icon!,
               iconSize: 25,
               splashRadius: 20,
               color: colors.AppColor.secondaryColor,

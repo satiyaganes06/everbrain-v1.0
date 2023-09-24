@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:everbrain/controller/login_controller.getx.dart';
 import 'package:get/get.dart';
 
+import '../presentation/Screens/auth/emailVerification/email_verify_Screen.dart';
+import '../presentation/Screens/dashboard/dashboard_Screen.dart';
+
 class EmailVerifyController extends GetxController{
 
   final loginController = Get.find<LoginController>();
@@ -26,12 +29,20 @@ class EmailVerifyController extends GetxController{
     }
   }
 
+  isEmailVerifyFun() async{
 
-  @override
-  void dispose() {
-    timer?.cancel();
-    super.dispose();
+    isEmailVerified.value = await loginController.firebaseService.currentUserEmailVerifiedStatus();
+
   }
+
+
+
+
+  // @override
+  // void dispose() {
+  //   timer?.cancel();
+  //   super.dispose();
+  // }
 
 
 }

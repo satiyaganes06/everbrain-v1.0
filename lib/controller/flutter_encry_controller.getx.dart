@@ -1,5 +1,7 @@
 
+import 'package:everbrain/Model/vault_password_model.dart';
 import 'package:everbrain/controller/edit_account_controller.getx.dart';
+import 'package:everbrain/controller/local_auth_controller.getx.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -8,9 +10,11 @@ import '../core/localServices/local_auth.dart';
 import '../presentation/Screens/dashboard/dashboard_Screen.dart';
 import '../presentation/Screens/accountOpt/editAccount/edit_account_screen.dart';
 import '../core/localServices/secure_storage_repository.dart';
+import '../presentation/Widget/global_widget.dart';
 import 'dashboard_controller.getx.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/keys.dart' as KY;
+import 'hive_controller.getx.dart';
 import 'login_controller.getx.dart';
 
 class FlutterEncryController extends GetxController{
@@ -20,14 +24,14 @@ class FlutterEncryController extends GetxController{
   static const _optPass = KY.KYS.optPass;
   static const _optDelete = KY.KYS.optDelete;
   static const _optCopy = KY.KYS.optCopy;
-
+  static const _optUnlock = KY.KYS.optUnlock;
 
   Future<LocalStorageResult> masterPassStore(String pass, String userID) async{
     var result;
 
     try {
       var result = await GetIt.I.get<LocalStorageSecure>().saveString(
-        userID, pass
+        KY.KYS.masterPasswordKey + userID, pass
       );
 
       debugPrint(result.toString());
@@ -46,7 +50,7 @@ class FlutterEncryController extends GetxController{
     var result;
 
     try {
-      var result = await GetIt.I.get<LocalStorageSecure>().removeData(userID);
+      var result = await GetIt.I.get<LocalStorageSecure>().removeData(KY.KYS.masterPasswordKey + userID);
 
       debugPrint(result.toString());
 
@@ -60,55 +64,87 @@ class FlutterEncryController extends GetxController{
     }
   }
 
+  Future<LocalStorageResult> removeKeys() async{
+    final loginCon = Get.find<LoginController>();
+
+    try {
+      var resultBio = await GetIt.I.get<LocalStorageSecure>().removeData(KY.KYS.isBiometric);
+      var resultIsPass =  await GetIt.I.get<LocalStorageSecure>().removeData(KY.KYS.isPasscode);
+      var resultPass =  await GetIt.I.get<LocalStorageSecure>().removeData(KY.KYS.passcodeKey);
+      var resultMasterPass = await GetIt.I.get<LocalStorageSecure>().removeData(loginCon.firebaseService.currentUser!.uid.toString());
+
+      if(resultBio == LocalStorageResult.deleted && resultIsPass == LocalStorageResult.deleted && resultPass == LocalStorageResult.deleted && resultMasterPass == LocalStorageResult.deleted){
+        return LocalStorageResult.deleted;
+      }else{
+        return LocalStorageResult.failed;
+      }
+
+    } catch (e) {
+
+      return LocalStorageResult.failed;
+    }
+  }
+
   void validateMasterPass(String value, BuildContext context, int optValue, {Vault? vault}) async{
     final loginCon = Get.find<LoginController>();
-    final editAccCon = Get.find<EditAccountController>();
     
     final master =
-        await GetIt.I.get<LocalStorageSecure>().getString(loginCon.firebaseService.currentUser!.uid.toString());
+        await GetIt.I.get<LocalStorageSecure>().getString(KY.KYS.masterPasswordKey + loginCon.firebaseService.currentUser!.uid.toString());
 
     if(value == master){
 
+
       switch (optValue) {
+        case _optUnlock:
+          Get.find<LocalAuthController>().isUnlock.value = true;
+          await Future.delayed(const Duration(seconds: 1)); 
+          Get.off(() => const DashboardScreen());
+          Get.find<LocalAuthController>().passcodeController.clear();
+          await Future.delayed(const Duration(seconds: 1)); 
+          Get.find<LocalAuthController>().isUnlock.value = false;
+          break;
+
         case _optCopy:
+
+          final editAccCon = Get.find<EditAccountController>();
           // ignore: use_build_context_synchronously
-          editAccCon.funPasswordCopy(vault!.vaultPassword, context);
+           editAccCon.funPasswordCopy(context);
           break;
 
         case _optPass:
-          editAccCon.funPasswordToggle();
+
+          final editAccCon = Get.find<EditAccountController>();
+          editAccCon.funPasswordViewToggle();
           break;
 
         case _optEdit:
           Get.to(EditAccountScreen(vault: vault ?? Vault(
-            userID: '',
+              userID: '',
             vaultID: '',
-            sourceName: '',
-            sourceImageUrl: '',
             vaultName: '',
-            vaultPassword: '',
-            hintPassword: '',
+            websiteImageUrl: '',
+            username: '',
             vaultCategory: '',
             isFavourite: false,
-            isMPUnlock: false)));
+            isBiometricUnlock: false, 
+            websiteUrl: '')));
           break;
 
         case _optDelete:
-          final dashboardController = Get.find<DashboardController>();
-        
+          final hiveCtrl = Get.find<HiveController>();
+          final editAccCon = Get.find<EditAccountController>();
           // ignore: use_build_context_synchronously
-          dashboardController.deleteVault(
-            editAccCon.updateCopyWith(vault ?? Vault(
-            userID: '',
+          hiveCtrl.deleteVault(
+            editAccCon.updatedVaultInfo(vault ?? Vault(
+              userID: '',
             vaultID: '',
-            sourceName: '',
-            sourceImageUrl: '',
             vaultName: '',
-            vaultPassword: '',
-            hintPassword: '',
+            websiteImageUrl: '',
+            username: '',
             vaultCategory: '',
             isFavourite: false,
-            isMPUnlock: false)),
+            isBiometricUnlock: false, 
+            websiteUrl: '')),
             context
           );
           Get.offAll(const DashboardScreen());
@@ -126,54 +162,75 @@ class FlutterEncryController extends GetxController{
     }
   }
 
-  void biometricUnlock({required int optValue, required String title ,required BuildContext context, Vault? vault}) async{
-    final isAuthenticated = await LocalAuth.authenticate("Scan to $title");
-    final editAccCon = Get.find<EditAccountController>();
+  void validatePasscode(String value) async{
+    if(Get.find<LocalAuthController>().passcode == value){     
+      Get.find<LocalAuthController>().isUnlock.value = true;
+      await Future.delayed(const Duration(seconds: 1)); 
+      Get.off(() => const DashboardScreen());
+      Get.find<LocalAuthController>().passcodeController.clear();
+      await Future.delayed(const Duration(seconds: 1)); 
+      Get.find<LocalAuthController>().isUnlock.value = false;
+    }
+  }
 
+  void biometricUnlock({required int optValue, required String title, required BuildContext context, Vault? vault}) async{
+    final isAuthenticated = await LocalAuth.authenticate("Scan to $title");
     if(isAuthenticated){
 
       switch (optValue) {
+        case _optUnlock:
+          Get.find<LocalAuthController>().isUnlock.value = true;
+          await Future.delayed(const Duration(seconds: 1)); 
+          Get.off(() => const DashboardScreen());
+          Get.find<LocalAuthController>().passcodeController.clear();
+          await Future.delayed(const Duration(seconds: 1)); 
+          Get.find<LocalAuthController>().isUnlock.value = false;
+          break;
         case _optCopy:
+          final editAccCon = Get.find<EditAccountController>();
           // ignore: use_build_context_synchronously
-          editAccCon.funPasswordCopy(vault!.vaultPassword, context);
+          editAccCon.funPasswordCopy(context);
           break;
 
         case _optPass:
-          editAccCon.funPasswordToggle();
+          print('here');
+          final editAccCon = Get.find<EditAccountController>();
+          editAccCon.funPasswordViewToggle() ;
+          
           break;
 
         case _optEdit:
-          Get.to(EditAccountScreen(vault: vault ?? Vault(
-            userID: '',
+        Get.to(() => EditAccountScreen(vault: vault ?? Vault(
+              userID: '',
             vaultID: '',
-            sourceName: '',
-            sourceImageUrl: '',
             vaultName: '',
-            vaultPassword: '',
-            hintPassword: '',
+            websiteImageUrl: '',
+            username: '',
             vaultCategory: '',
             isFavourite: false,
-            isMPUnlock: false)));
+            isBiometricUnlock: false, 
+            websiteUrl: '')));
           break;
 
         case _optDelete:
-          final dashboardController = Get.find<DashboardController>();
-        
+          final hiveCtrl = Get.find<HiveController>();
+          final editAccCon = Get.find<EditAccountController>();
           // ignore: use_build_context_synchronously
-          dashboardController.deleteVault(
-            editAccCon.updateCopyWith(vault ?? Vault(
-            userID: '',
+          hiveCtrl.deleteVault(
+            editAccCon.updatedVaultInfo(vault ?? Vault(
+              userID: '',
             vaultID: '',
-            sourceName: '',
-            sourceImageUrl: '',
             vaultName: '',
-            vaultPassword: '',
-            hintPassword: '',
+            websiteImageUrl: '',
+            username: '',
             vaultCategory: '',
             isFavourite: false,
-            isMPUnlock: false)),
+            isBiometricUnlock: false, 
+            websiteUrl: '')),
             context
           );
+
+          hiveCtrl.deleteVaultPass(vault!.vaultID, context);
           Get.offAll(const DashboardScreen());
           break;
         default:
@@ -181,5 +238,6 @@ class FlutterEncryController extends GetxController{
       
     }
   }
+  
   
 }

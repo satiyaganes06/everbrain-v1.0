@@ -1,3 +1,4 @@
+import 'package:everbrain/presentation/Widget/global_widget.dart';
 import 'package:fancy_password_field/fancy_password_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,8 +27,13 @@ class SignUpController extends GetxController {
   }
 
   void sigUpFun(BuildContext context) {
-    loginController.firebaseService.signUp(emailField.text,
-        passwordField.toString(), passwordHints.text, isAgree, context);
+    if(isAgree){
+      loginController.firebaseService.signUp(emailField.text,
+        passwordField.text, passwordHints.text, isAgree, context);
+    }else{
+      failMessage(context, 'Agree to the terms and conditions');
+    }
+    
   }
 
   @override

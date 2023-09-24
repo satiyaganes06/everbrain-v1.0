@@ -18,5 +18,11 @@ class LoginController extends GetxController{
     update();
   }
 
+  @override
+  void dispose() {
+    password_field.dispose();
+    super.dispose();
+  }
+
 
 }

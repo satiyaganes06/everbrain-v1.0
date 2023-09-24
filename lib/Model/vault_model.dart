@@ -14,20 +14,17 @@ class Vault extends HiveObject {
   @HiveField(1)
   final String vaultID;
 
-  @HiveField(2)
-  final String sourceName;
-
-  @HiveField(9)
-  final String sourceImageUrl;
-
+  @HiveField(12)
+  final String username;
+  
   @HiveField(3)
   final String vaultName;
 
-  @HiveField(4)
-  final String vaultPassword;
+  @HiveField(10)
+  final String websiteUrl;
 
-  @HiveField(5)
-  final String hintPassword;
+  @HiveField(13)
+  final String websiteImageUrl;
 
   @HiveField(6)
   final String vaultCategory;
@@ -35,45 +32,42 @@ class Vault extends HiveObject {
   @HiveField(7)
   final bool isFavourite;
 
-  @HiveField(8)
-  final bool isMPUnlock;
+  @HiveField(11)
+  final bool isBiometricUnlock;
 
   Vault({
     required this.userID,
     required this.vaultID,
-    required this.sourceName,
-    required this.sourceImageUrl,
+    required this.username,
+    required this.websiteImageUrl,
     required this.vaultName,
-    required this.vaultPassword,
-    required this.hintPassword,
+    required this.websiteUrl,
     required this.vaultCategory,
     required this.isFavourite,
-    required this.isMPUnlock,
+    required this.isBiometricUnlock,
   });
 
   Vault copyWith({
     String? userID,
     String? vaultID,
-    String? sourceName,
-    String? sourceImageUrl,
+    String? username,
+    String? websiteImageUrl,
     String? vaultName,
-    String? vaultPassword,
-    String? hintPassword,
+    String? websiteUrl,
     String? vaultCategory,
     bool? isFavourite,
-    bool? isMPUnlock,
+    bool? isBiometricUnlock,
   }) {
     return Vault(
       userID: userID ?? this.userID,
       vaultID: vaultID ?? this.vaultID,
-      sourceName: sourceName ?? this.sourceName,
-      sourceImageUrl: sourceImageUrl ?? this.sourceImageUrl,
+      username: username ?? this.username,
+      websiteImageUrl: websiteImageUrl ?? this.websiteImageUrl,
       vaultName: vaultName ?? this.vaultName,
-      vaultPassword: vaultPassword ?? this.vaultPassword,
-      hintPassword: hintPassword ?? this.hintPassword,
+      websiteUrl: websiteUrl ?? this.websiteUrl,
       vaultCategory: vaultCategory ?? this.vaultCategory,
       isFavourite: isFavourite ?? this.isFavourite,
-      isMPUnlock: isMPUnlock ?? this.isMPUnlock,
+      isBiometricUnlock: isBiometricUnlock ?? this.isBiometricUnlock,
     );
   }
 
@@ -81,14 +75,13 @@ class Vault extends HiveObject {
     return <String, dynamic>{
       'userID': userID,
       'vaultID': vaultID,
-      'sourceName': sourceName,
-      'sourceImageUrl': sourceImageUrl,
+      'username': username,
+      'websiteImageUrl': websiteImageUrl,
       'vaultName': vaultName,
-      'vaultPassword': vaultPassword,
-      'hintPassword': hintPassword,
+      'websiteUrl': websiteUrl,
       'vaultCategory': vaultCategory,
       'isFavourite': isFavourite,
-      'isMPUnlock': isMPUnlock,
+      'isBiometricUnlock': isBiometricUnlock,
     };
   }
 
@@ -96,14 +89,13 @@ class Vault extends HiveObject {
     return Vault(
       userID: map['userID'] as String,
       vaultID: map['vaultID'] as String,
-      sourceName: map['sourceName'] as String,
-      sourceImageUrl: map['sourceImageUrl'] as String,
+      username: map['username'] as String,
+      websiteImageUrl: map['websiteImageUrl'] as String,
       vaultName: map['vaultName'] as String,
-      vaultPassword: map['vaultPassword'] as String,
-      hintPassword: map['hintPassword'] as String,
+      websiteUrl: map['websiteUrl'] as String,
       vaultCategory: map['vaultCategory'] as String,
       isFavourite: map['isFavourite'] as bool,
-      isMPUnlock: map['isMPUnlock'] as bool,
+      isBiometricUnlock: map['isBiometricUnlock'] as bool,
     );
   }
 

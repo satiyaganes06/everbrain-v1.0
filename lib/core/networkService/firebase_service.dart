@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:everbrain/presentation/Screens/auth/login/loginScreen.dart';
+import 'package:everbrain/presentation/Screens/dashboard/dashboard_Screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,7 @@ import '../../controller/flutter_encry_controller.getx.dart';
 import '../../controller/login_controller.getx.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import '../../presentation/Screens/auth/emailVerification/email_verify_Screen.dart';
+import '../../presentation/Screens/auth/widget_Tree.dart';
 import '../../presentation/Widget/loading.dart';
 import '../localServices/secure_storage_repository.dart';
 
@@ -15,10 +17,16 @@ class FirebaseService {
   final _firebaseAuth = FirebaseAuth.instance;
   final _fireStore = FirebaseFirestore.instance;
   final _collectionHintName = 'userHints';
+  var userID ;
+
 
   //To get current user info
   User? get currentUser {
     return _firebaseAuth.currentUser;
+  }
+
+  void currentUserID() {
+    userID = _firebaseAuth.currentUser!.uid.toString();
   }
 
   Stream<User?> get authStateChanges {
@@ -34,13 +42,30 @@ class FirebaseService {
         });
 
     try {
-      await _firebaseAuth
+      await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: _email, password: _password)
-          .then((value) {
+          .then((value) async{
         
         createUser(_firebaseAuth.currentUser!.uid, _email, passwordHints, isAgree);
-       
-        Get.off(const VerifyEmailScreen());
+
+        Get.lazyPut(() => FlutterEncryController());
+
+        var resultKey = await Get.find<FlutterEncryController>().masterPassStore(
+            _password, _firebaseAuth.currentUser!.uid);
+
+        if (resultKey == LocalStorageResult.saved) {
+          print(resultKey);
+          Get.off(const VerifyEmailScreen());
+
+        } else {
+          Get.snackbar('Error', 'Login key error',
+              backgroundColor: colors.AppColor.fail,
+              colorText: colors.AppColor.secondaryColor,
+              snackPosition: SnackPosition.BOTTOM);
+              
+          signOut();
+        }
+        
       });
     } on FirebaseAuthException catch (e) {
       Get.snackbar('Error', e.toString().split(']').last.trimLeft(),
@@ -53,7 +78,7 @@ class FirebaseService {
   }
 
   //E-mail Sign In
-  Future signIn(String _email, String _password, var context) async {
+  Future signIn(String email, String password, var context) async {
     showDialog(
         context: context,
         builder: (context) {
@@ -61,25 +86,38 @@ class FirebaseService {
         });
 
     try {
+      
       await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: _email.tr, password: _password)
+          .signInWithEmailAndPassword(email: email, password: password)
           .then((value) async {
         final loginController = Get.find<LoginController>();
-        final encryController = Get.find<FlutterEncryController>();
+        final encryController = Get.put(FlutterEncryController());
+
+        currentUserID();
 
         var resultKey = await encryController.masterPassStore(
-            _password, _firebaseAuth.currentUser!.uid.toString());
+            password, userID);
 
         if (resultKey == LocalStorageResult.saved) {
           loginController.email_field.clear();
           loginController.password_field.clear();
+          
+          var status = await currentUserEmailVerifiedStatus();
 
-          Get.off(const VerifyEmailScreen());
+          if(status == true){
+            Get.offAll(const DashboardScreen());
+
+          }else{
+            Get.offAll(const VerifyEmailScreen());
+
+          }
+
         } else {
           Get.snackbar('Error', 'Login key error',
               backgroundColor: colors.AppColor.fail,
               colorText: colors.AppColor.secondaryColor,
               snackPosition: SnackPosition.BOTTOM);
+              
           signOut();
         }
       });
@@ -97,13 +135,12 @@ class FirebaseService {
     String id = _firebaseAuth.currentUser!.uid.toString();
     try {
       await FirebaseAuth.instance.signOut().then((value) async {
-        final encryController = Get.find<FlutterEncryController>();
-        var resultKey = await encryController
+        Get.lazyPut(() => FlutterEncryController());
+
+        var resultKey = await Get.find<FlutterEncryController>()
             .masterPassClear(id);
-        debugPrint("Helloo" + resultKey.toString());
         if (resultKey == LocalStorageResult.deleted) {
-          debugPrint("Helloo" + resultKey.toString());
-          Get.off(LoginScreen());
+          Get.offAll(LoginScreen());
         } else {
           ScaffoldMessenger.of(context!).showSnackBar(SnackBar(
             content: const Text('Log out error. Try again in while'),
@@ -134,8 +171,12 @@ class FirebaseService {
       Get.snackbar('Error', e.toString().split(']').last.trimLeft(),
           backgroundColor: colors.AppColor.fail,
           colorText: colors.AppColor.secondaryColor,
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, duration: const Duration(seconds: 10));
     }
+  }
+
+  Future currentUserEmailVerifiedStatus() async {
+    return _firebaseAuth.currentUser!.emailVerified ;
   }
 
   Future checkEmailVerified(RxBool isEmailVerified) async {

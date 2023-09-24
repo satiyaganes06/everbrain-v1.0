@@ -1,12 +1,13 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:everbrain/controller/setting_controller.getx.dart';
+import 'package:everbrain/presentation/Screens/auth/local_auth/local_auth_screen.dart';
 import 'package:everbrain/presentation/Widget/space.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
+import 'package:everbrain/utils/dimensions.dart' as dimens;
 import '../../../controller/login_controller.getx.dart';
 import '../../Widget/appbar.dart';
 import '../../Widget/subtitle_font copy.dart';
@@ -16,8 +17,8 @@ class SettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settingController = Get.put(SettingController());
-    
+    final settingController = Get.find<SettingController>();
+
     return Scaffold(
         appBar: CommonAppbar(title: "Settings"),
         body: ListView(
@@ -25,9 +26,13 @@ class SettingScreen extends StatelessWidget {
             physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.symmetric(horizontal: 25),
             children: [
+
               Space(Get.height * 0.02),
+
               SubtitleFont('Security'),
+
               Space(Get.height * 0.02),
+
               ListTile(
                 enabled: false,
                 leading: Icon(
@@ -70,24 +75,22 @@ class SettingScreen extends StatelessWidget {
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: colors.AppColor.tertiaryColor)),
-                trailing: GetBuilder<SettingController>(
-                  id: 'biometric',
-                  builder: (_) {
-                    return Text(settingController.currentBiometricOption,
-                        style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: settingController.currentBiometricOption == 'off' ? colors.AppColor.subtitleColor : colors.AppColor.success));
-                  }
-                ),
+                trailing: Obx(() => Text(
+                    settingController.currentBiometricOption.value,
+                    style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: settingController.currentBiometricOption.value ==
+                                settingController.settingOption[0]
+                            ? colors.AppColor.subtitleColor
+                            : colors.AppColor.success))),
                 onTap: () {
-                  _showBottomSheet(context, settingController);
+                  _showBottomSheetBiometric(context, settingController);
                 },
               ),
-
               ListTile(
                 leading: Icon(
-                  Iconsax.finger_scan,
+                  Icons.pin_outlined,
                   size: 20,
                   color: colors.AppColor.tertiaryColor,
                 ),
@@ -96,18 +99,20 @@ class SettingScreen extends StatelessWidget {
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: colors.AppColor.tertiaryColor)),
-                trailing: GetBuilder<SettingController>(
-                  id: 'biometric',
-                  builder: (_) {
-                    return Text(settingController.currentBiometricOption,
-                        style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: settingController.currentBiometricOption == 'off' ? colors.AppColor.subtitleColor : colors.AppColor.success));
-                  }
-                ),
+                trailing: Obx(() => Text(
+                    settingController.currentPasscodeOption.value,
+                    style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: settingController.currentPasscodeOption.value ==
+                                settingController.settingOption[0]
+                            ? colors.AppColor.subtitleColor
+                            : colors.AppColor.success))),
                 onTap: () {
-                  _showBottomSheet(context, settingController);
+                  settingController.currentPasscodeOption.value ==
+                          settingController.settingOption[0]
+                      ? _showBottomSheetPasscode(context, settingController)
+                      : settingController.setPasscodeOption('', 'off', context);
                 },
               ),
 
@@ -117,14 +122,21 @@ class SettingScreen extends StatelessWidget {
                   size: 20,
                   color: colors.AppColor.tertiaryColor,
                 ),
-                title: const Text("Lock now"),
+                title: Text("Lock now", style:  GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: colors.AppColor.tertiaryColor)),
                 onTap: () {
-                  Navigator.pop(context);
+                  Get.offAll(LocalAuthScreen());
                 },
               ),
+
               Space(Get.height * 0.02),
+
               SubtitleFont('Backup'),
+
               Space(Get.height * 0.02),
+
               ListTile(
                 enabled: false,
                 leading: Icon(
@@ -132,12 +144,15 @@ class SettingScreen extends StatelessWidget {
                   size: 20,
                   color: colors.AppColor.tertiaryColor,
                 ),
-                title: Row(children: [
+                title: Row(
+                  children: [
+
                   Text("Export Vault",
                       style: GoogleFonts.poppins(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                           color: colors.AppColor.tertiaryColor)),
+
                   Container(
                     margin: const EdgeInsets.only(left: 10),
                     padding:
@@ -152,6 +167,7 @@ class SettingScreen extends StatelessWidget {
                             color: colors.AppColor.secondaryColor)),
                   )
                 ]),
+
                 onTap: () {
                   Navigator.pop(context);
                 },
@@ -162,22 +178,23 @@ class SettingScreen extends StatelessWidget {
               SubtitleFont('Other'),
 
               Space(Get.height * 0.02),
-              
+
               ListTile(
                 leading: Icon(
                   Iconsax.people,
                   size: 20,
                   color: colors.AppColor.tertiaryColor,
                 ),
-                title: Text("About Us",
+                title: Text("About",
                     style: GoogleFonts.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: colors.AppColor.tertiaryColor)),
                 onTap: () {
-                  Navigator.pop(context);
+                  _showDialogBar(context, 'About', 'Everbrain v1.0.0');
                 },
               ),
+
               ListTile(
                 leading: Icon(
                   Icons.contact_support_outlined,
@@ -190,75 +207,118 @@ class SettingScreen extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         color: colors.AppColor.tertiaryColor)),
                 onTap: () {
-                  Navigator.pop(context);
+                  settingController.contactEmailFun();
                 },
               ),
               ListTile(
                 leading: Icon(
                   Icons.logout_outlined,
                   size: 20,
-                  color: colors.AppColor.tertiaryColor,
+                  color: colors.AppColor.fail,
                 ),
-                title: const Text("Logout"),
+                title:  Text("Logout", style:  GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: colors.AppColor.fail)),
                 onTap: () {
-                  Navigator.pop(context);
-                  final loginContrl = Get.find<LoginController>();
-
-                  loginContrl.firebaseService.signOut();
+                  
+                  settingController.signOutFun(context);
                 },
               ),
               Space(Get.height * 0.05),
             ]));
   }
 
-  _showBottomSheet(BuildContext context, SettingController settingController) {
+  _showBottomSheetBiometric(
+      BuildContext context, SettingController settingController) {
     return showModalActionSheet(
         context: context,
-        title: 'Menu',
         builder: (context, _) {
-          return GetBuilder<SettingController>(
-            id: 'biometric',
-            builder: (_) {
-              return Column(
+          return Obx(() => Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   RadioListTile(
                     selected: true,
                     selectedTileColor: colors.AppColor.lightGrey,
                     title: Text(
-                      'off',
+                      settingController.settingOption[0],
                       style: GoogleFonts.poppins(
                           color: colors.AppColor.tertiaryColor,
                           fontWeight: FontWeight.w500,
                           fontSize: 14),
                     ),
-                    groupValue: settingController.currentBiometricOption,
+                    groupValue: settingController.currentBiometricOption.value,
                     onChanged: (value) {
                       settingController.setBiometricOption(value!, context);
                     },
                     value: settingController.settingOption[0],
                   ),
-
                   RadioListTile(
                     selected: true,
                     selectedTileColor: colors.AppColor.lightGrey,
                     title: Text(
-                      'on',
+                      settingController.settingOption[1],
                       style: GoogleFonts.poppins(
                           color: colors.AppColor.tertiaryColor,
                           fontWeight: FontWeight.w500,
                           fontSize: 14),
                     ),
-                    groupValue: settingController.currentBiometricOption,
+                    groupValue: settingController.currentBiometricOption.value,
                     onChanged: (value) {
                       settingController.setBiometricOption(value!, context);
                     },
                     value: settingController.settingOption[1],
                   ),
                 ],
-              );
-            }
-          );
+              ));
         });
+  }
+
+  _showBottomSheetPasscode(
+      BuildContext context, SettingController settingController) {
+    return showTextInputDialog(
+        context: context,
+        title: 'Enter Passcode',
+        message:
+            'Set your passcode for unlock Everbrain. Your passcode settings will be reset if you logout from your account.',
+        textFields: [
+          DialogTextField(
+            keyboardType: TextInputType.number,
+            obscureText: true,
+            hintText: 'Passcode',
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter passcode';
+              } else if (value!.length != 4) {
+                return 'Please enter 4 digit passcode';
+              } else {
+                settingController.setPasscodeOption(
+                    value!, settingController.settingOption[1], context);
+              }
+            },
+          )
+        ]);
+  }
+
+  _showDialogBar(BuildContext context, String title, String message) {
+    return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(title),
+              content: Text(
+                message,
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                ),
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('OK'))
+              ],
+            ));
   }
 }

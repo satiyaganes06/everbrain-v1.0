@@ -1,5 +1,7 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:delayed_display/delayed_display.dart';
+import 'package:everbrain/presentation/Screens/accountOpt/viewAccount/widget/view_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
@@ -10,25 +12,49 @@ import 'package:everbrain/utils/dimensions.dart' as dimens;
 import '../../../../Model/vault_model.dart';
 import '../../../../controller/edit_account_controller.getx.dart';
 import '../../../../controller/flutter_encry_controller.getx.dart';
+import '../../../../controller/hive_controller.getx.dart';
 import '../../../Widget/appbar.dart';
+import '../../../Widget/global_widget.dart';
 import '../../../Widget/space.dart';
 import '../../../Widget/subtitle2_font.dart';
 import '../../../Widget/subtitle_font copy.dart';
 
-class ViewVaultScreen extends StatelessWidget {
-  final editAccController = Get.put(EditAccountController());
-  final encryController = Get.find<FlutterEncryController>();
+class ViewVaultScreen extends StatefulWidget {
   final Vault vault;
 
-  ViewVaultScreen({super.key, required this.vault});
+  const ViewVaultScreen({super.key, required this.vault});
+
+  @override
+  State<ViewVaultScreen> createState() => _ViewVaultScreenState();
+}
+
+class _ViewVaultScreenState extends State<ViewVaultScreen> {
+  final editAccController = Get.put(EditAccountController());
+  final hiveController = Get.find<HiveController>();
+
+  @override
+  void initState() {
+    editAccController.vaultNameCtrl.text = widget.vault.vaultName;
+    editAccController.vaultUsernameCtrl.text = widget.vault.username;
+    getVaultPass();
+    editAccController.vaultWebsiteURLCtrl.text = widget.vault.websiteUrl;
+    editAccController.vaultWebsiteImageUrl = widget.vault.websiteImageUrl;
+    super.initState();
+  }
+
+  getVaultPass() async {
+    editAccController.vaultPasswordCtrl.text =
+        await hiveController.getVaultPassword(widget.vault.vaultID);
+  }
 
   @override
   build(BuildContext context) {
     const animationDuration = 100;
+    Get.lazyPut(() => FlutterEncryController());
 
     return Scaffold(
       backgroundColor: colors.AppColor.secondaryColor,
-      appBar: CommonAppbar(title: 'View Account'),
+      appBar: CommonAppbar(title: '${widget.vault.vaultName} Vault'),
       body: SizedBox(
           child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -38,144 +64,109 @@ class ViewVaultScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Space(Get.height * 0.03),
-
-              title('Account Infomation'),
-
+              title('Vault Infomation'),
               Space(Get.height * 0.02),
-
-              fieldTitle('Name'),
+              DelayedDisplay(
+                  delay: Duration(
+                      milliseconds: dimens.Dimens.delayAnimationLogInPage),
+                  child: viewTextField(
+                    textField(editAccController.vaultNameCtrl, 'Name',
+                        TextInputType.text, false, true, false, true, image: widget.vault.websiteImageUrl),
+                  )),
+              Space(Get.height * 0.03),
+              DelayedDisplay(
+                  delay: Duration(
+                      milliseconds: dimens.Dimens.delayAnimationLogInPage),
+                  child: viewTextField(textField(
+                      editAccController.vaultUsernameCtrl,
+                      'Email/Username/Phone',
+                      TextInputType.emailAddress,
+                      false,
+                      true,
+                      false,
+                      false))),
+              Space(Get.height * 0.03),
 
               DelayedDisplay(
-                  delay: const Duration(milliseconds: animationDuration),
+                  delay: Duration(
+                      milliseconds: dimens.Dimens.delayAnimationLogInPage),
+                  child: viewTextField(textField(
+                      editAccController.vaultWebsiteURLCtrl,
+                      'URL',
+                      TextInputType.text,
+                      false,
+                      true,
+                      false,
+                      false))),
+              Space(Get.height * 0.03),
+
+              DelayedDisplay(
+                  delay: Duration(
+                      milliseconds: dimens.Dimens.delayAnimationLogInPage),
                   child: SizedBox(
-                      width: dimens.Dimens.emailContainerHeightSignUp,
-                      child: TextFormField(
-                        initialValue: vault.sourceName,
-                        readOnly: true,
-                        keyboardType: TextInputType.name,
-                        cursorColor: colors.AppColor.primaryColor,
+                    width: dimens.Dimens.emailContainerHeightSignUp,
+                    child: GetBuilder<EditAccountController>(
+                        builder: (editAccountController) {
+                      return TextFormField(
+                        controller: editAccountController.vaultPasswordCtrl,
+                        keyboardType:
+                            editAccountController.getPassViewToggle == false
+                                ? TextInputType.visiblePassword
+                                : TextInputType.emailAddress,
+                        obscureText: editAccountController.getPassViewToggle,
                         textAlignVertical: TextAlignVertical.center,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: colors.AppColor.lightGrey,
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                                width: 0, color: colors.AppColor.lightGrey),
-                            borderRadius: BorderRadius.circular(10),
+                                width: 2, color: colors.AppColor.accentColor),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          hintText: 'Password',
+                          hintStyle: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
                           ),
                           contentPadding: EdgeInsets.symmetric(
-                              horizontal: dimens
-                                  .Dimens.emailContentHorizontalPaddingSignUp,
-                              vertical: dimens
-                                  .Dimens.emailContentVerticalPaddingSignUp),
-                        ),
-                        style: GoogleFonts.poppins(
-                            color: colors.AppColor.tertiaryColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14),
-                      ))),
-
-              Space(Get.height * 0.03),
-
-              fieldTitle('Account name'),
-
-              DelayedDisplay(
-                delay: const Duration(milliseconds: animationDuration),
-                child: SizedBox(
-                    width: dimens.Dimens.emailContainerHeightSignUp,
-                    child: TextFormField(
-                      initialValue: vault.vaultName,
-                      readOnly: true,
-                      keyboardType: TextInputType.emailAddress,
-                      cursorColor: colors.AppColor.primaryColor,
-                      textAlignVertical: TextAlignVertical.center,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: colors.AppColor.lightGrey,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 0, color: colors.AppColor.lightGrey),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: dimens
-                                .Dimens.emailContentHorizontalPaddingSignUp,
-                            vertical: dimens
-                                .Dimens.emailContentVerticalPaddingSignUp),
-                      ),
-                      style: GoogleFonts.poppins(
-                          color: colors.AppColor.tertiaryColor,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    ))),
-
-              Space(Get.height * 0.03),
-
-              fieldTitle('Password'),
-              DelayedDisplay(
-                delay: const Duration(milliseconds: animationDuration),
-                child: SizedBox(
-                  width: dimens.Dimens.emailContainerHeightSignUp,
-                  child: GetBuilder<EditAccountController>(initState: (state) {
-                    editAccController.makePassTrue();
-                  }, dispose: (state) {
-                    editAccController.makePassTrue();
-                  }, builder: (editAccController) {
-                    return TextFormField(
-                      initialValue: vault.vaultPassword,
-                      keyboardType: editAccController.getPassToggle == false
-                          ? TextInputType.visiblePassword
-                          : TextInputType.emailAddress,
-                      obscureText: editAccController.getPassToggle,
-                      // readOnly: true,
-                      cursorColor: Colors.grey,
-                      textAlignVertical: TextAlignVertical.center,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: colors.AppColor.lightGrey,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 0, color: colors.AppColor.lightGrey),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        hintText: 'Password',
-                        hintStyle: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
-                        ),
-                        contentPadding: const EdgeInsets.only(left: 20),
-                        suffixIcon: Row(
+                              horizontal: dimens.Dimens
+                                  .textFieldContentHorizontalPaddingSignUp,
+                              vertical: dimens.Dimens
+                                  .textFieldContentVerticalPaddingSignUp),
+                          suffixIcon: Row(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               IconButton(
                                 onPressed: () {
-                                  editAccController.getPassToggle == false
-                                      ? editAccController.funPasswordToggle()
-                                      : !vault.isMPUnlock ?  _buildShowTextField(context, KY.KYS.optPass) : encryController.biometricUnlock(
+                                  editAccController.getPassViewToggle == false
+                                      ? editAccController.funPasswordViewToggle()
+                                      : !widget.vault.isBiometricUnlock ?  _buildShowTextField(context, KY.KYS.optPass) : Get.find<FlutterEncryController>().biometricUnlock(
                                         optValue: KY.KYS.optPass,
                                         title: 'unlock password',
                                         context: context,
-                                        vault:vault
+                                        vault: widget.vault
                                       );
                                 },
-                                icon: editAccController.getPassToggle == false
+                                icon: editAccController.getPassViewToggle == false
                                     ? const Icon(Icons.visibility_off_outlined)
                                     : const Icon(Icons.visibility_outlined),
                                 iconSize: 20,
                                 splashRadius: 20,
-                                color: editAccController.getPassToggle == false
+                                color: editAccController.getPassViewToggle == false
                                     ? Colors.redAccent
                                     : const Color.fromARGB(255, 36, 56, 70),
                               ),
                               IconButton(
                                 onPressed: () {
-                                  !vault.isMPUnlock ?  _buildShowTextField(context, KY.KYS.optCopy) : encryController.biometricUnlock(
-                                    optValue: KY.KYS.optCopy,
-                                    title: 'copy password',
-                                    context: context,
-                                    vault:vault
-                                  );
+                                  // !widget.vault.isBiometricUnlock ?  _buildShowTextField(context, KY.KYS.optCopy) : Get.find<FlutterEncryController>().biometricUnlock(
+                                  //   optValue: KY.KYS.optCopy,
+                                  //   title: 'copy password',
+                                  //   context: context,
+                                  //   vault:widget.vault
+                                  // );
+
+                                  editAccController.funPasswordCopy(context);
                                 },
                                 icon: const Icon(Icons.copy_all_rounded),
                                 color: colors.AppColor.tertiaryColor,
@@ -183,123 +174,66 @@ class ViewVaultScreen extends StatelessWidget {
                                 splashRadius: 20,
                               )
                             ]),
-                        suffixIconColor: Colors.grey,
-                      ),
-                      style: GoogleFonts.poppins(
-                        color: colors.AppColor.tertiaryColor,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
-                    );
-                  }),
-                ),
-              ),
-
-              Space(Get.height * 0.03),
-
-              fieldTitle('Password Hint'),
-
-              DelayedDisplay(
-                  delay: const Duration(milliseconds: animationDuration),
-                  child: SizedBox(
-                    width: dimens.Dimens.emailContainerHeightSignUp,
-                    child: TextFormField(
-                      initialValue: vault.hintPassword,
-                      keyboardType: TextInputType.emailAddress,
-                      readOnly: true,
-                      cursorColor: Colors.grey,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: colors.AppColor.lightGrey,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 0, color: colors.AppColor.lightGrey),
-                          borderRadius: BorderRadius.circular(10),
+                          suffixIconColor: Colors.grey,
                         ),
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 20),
-                      ),
-                      maxLines: 2,
-                      minLines: 1,
-                      style: GoogleFonts.poppins(
-                          color: colors.AppColor.tertiaryColor,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    ),
+                        validator: (value) {
+                          RegExp regex = RegExp(
+                              r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+                          if (value!.isEmpty) {
+                            return 'Please enter password';
+                          } else {
+                            if (!regex.hasMatch(value)) {
+                              return 'Enter valid password';
+                            } else {
+                              return null;
+                            }
+                          }
+                        },
+                      );
+                    }),
                   )),
-              
               Space(Get.height * 0.03),
-
-              fieldTitle('Image Url'),
-
-              DelayedDisplay(
-                  delay: const Duration(milliseconds: animationDuration),
-                  child: SizedBox(
-                    width: dimens.Dimens.emailContainerHeightSignUp,
-                    child: TextFormField(
-                      initialValue: vault.sourceImageUrl,
-                      keyboardType: TextInputType.emailAddress,
-                      readOnly: true,
-                      cursorColor: Colors.grey,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: colors.AppColor.lightGrey,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 0, color: colors.AppColor.lightGrey),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 20),
-                      ),
-                      style: GoogleFonts.poppins(
-                          color: colors.AppColor.tertiaryColor,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    ),
-                  )),
               
-              Space(Get.height * 0.03),
-
               title('Category'),
-
               Space(Get.height * 0.01),
-
               DelayedDisplay(
                   delay: const Duration(milliseconds: animationDuration),
-                  child: SizedBox(
-                      width: dimens.Dimens.emailContainerHeightSignUp,
-                      child: TextFormField(
-                        initialValue: vault.vaultCategory,
-                        enabled: false,
-                        cursorColor: Colors.grey,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: colors.AppColor.lightGrey,
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                width: 0, color: colors.AppColor.lightGrey),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 20),
+                  child: Container(
+                      padding: EdgeInsets.symmetric(
+                          vertical: dimens
+                              .Dimens.textFieldContentVerticalPaddingSignUp,
+                          horizontal: dimens
+                              .Dimens.textFieldContentHorizontalPaddingSignUp),
+                      decoration: BoxDecoration(
+                        color: colors.AppColor.lightGrey,
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                          width: 2,
+                          color: colors.AppColor.accentColor,
                         ),
-                        maxLines: 2,
-                        minLines: 1,
-                        style: GoogleFonts.poppins(
-                            color: colors.AppColor.tertiaryColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14),
-                      ))),
-
-              Space(Get.height * 0.01),
-
-              // _buildCategoriesButtons(),
-
+                      ),
+                      width: dimens.Dimens.emailContainerHeightSignUp,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                                child: Text(
+                              widget.vault.vaultCategory,
+                              style: GoogleFonts.poppins(
+                                  color: colors.AppColor.accentColor,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14),
+                            )),
+                            CircleAvatar(
+                              radius: 15,
+                              backgroundImage: AssetImage(editAccController
+                                      .category_Button_Image_Path[
+                                  editAccController.category_Button_Image_title
+                                      .indexOf(widget.vault.vaultCategory)]),
+                            )
+                          ]))),
               Space(Get.height * 0.03),
-
               title('Advance Setup'),
-
               Space(Get.height * 0.01),
               DelayedDisplay(
                   delay: const Duration(milliseconds: animationDuration),
@@ -319,11 +253,11 @@ class ViewVaultScreen extends StatelessWidget {
                               FlutterSwitch(
                                 width: 50,
                                 height: 30,
-                                activeColor: colors.AppColor.primaryColor,
+                                activeColor: colors.AppColor.success2,
                                 inactiveColor: colors.AppColor.lightGrey,
                                 disabled: true,
                                 toggleColor: colors.AppColor.secondaryColor,
-                                value: vault.isFavourite,
+                                value: widget.vault.isFavourite,
                                 onToggle: (val) {},
                               ),
                             ]),
@@ -342,29 +276,29 @@ class ViewVaultScreen extends StatelessWidget {
                               FlutterSwitch(
                                 width: 50,
                                 height: 30,
-                                activeColor: colors.AppColor.primaryColor,
+                                activeColor: colors.AppColor.success2,
                                 inactiveColor: colors.AppColor.lightGrey,
                                 toggleColor: colors.AppColor.secondaryColor,
-                                value: vault.isMPUnlock,
+                                value: widget.vault.isBiometricUnlock,
                                 disabled: true,
                                 onToggle: (val) {},
                               ),
                             ]),
                       ]))),
-
-              Space(Get.height * 0.15),
+              Space(Get.height * 0.05),
             ],
           ),
         ),
       )),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          !vault.isMPUnlock ?  _buildShowTextField(context, KY.KYS.optEdit) : encryController.biometricUnlock(
-            optValue: KY.KYS.optEdit,
-            title: 'edit account',
-            context: context,
-            vault:vault
-          );
+          !widget.vault.isBiometricUnlock
+              ? _buildShowTextField(context, KY.KYS.optEdit)
+              : Get.find<FlutterEncryController>().biometricUnlock(
+                  optValue: KY.KYS.optEdit,
+                  title: 'edit account',
+                  context: context,
+                  vault: widget.vault);
         },
         backgroundColor: colors.AppColor.tertiaryColor,
         child: const Icon(Icons.edit),
@@ -401,14 +335,14 @@ class ViewVaultScreen extends StatelessWidget {
   _buildShowTextField(BuildContext context, int path) {
     return showTextInputDialog(context: context, textFields: [
       DialogTextField(
-        obscureText: editAccController.getPassToggle,
+        obscureText: true,
         hintText: 'Master Password',
         validator: (value) {
           if (value!.isEmpty) {
             return 'Please enter correct master password';
           } else {
-            encryController.validateMasterPass(value, context, path,
-                vault: vault);
+            Get.find<FlutterEncryController>()
+                .validateMasterPass(value, context, path,  vault: widget.vault);
           }
         },
       )

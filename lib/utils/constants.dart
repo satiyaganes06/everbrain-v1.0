@@ -22,19 +22,21 @@ class Constants{
   static String logInTitle = 'Login' ;
   static String emailFieldLogIn = 'Enter email';
   static String emailFieldErrorLogIn = 'Enter correct email';
-  static String masterPasswordFieldLogIn= 'Enter Password';
-  static String masterPasswordFieldEmptyLogIn = 'Please enter password';
-  static String masterPasswordFieldErrorLogIn = 'Enter valid password';
+  static String masterPasswordFieldLogIn= 'Enter Master Password';
+  static String masterPasswordFieldEmptyLogIn = 'Please enter master password';
+  static String masterPasswordFieldErrorLogIn = 'Enter valid master password';
   static String masterPasswordHint = 'Get Master Password Hint';
   static String submitButtonTitleLogIn = 'Login';
   static String notAmemberSubtextLogIn = 'Not a member?';
 
  
-  static String addAccountTitle = 'Add Account' ;
-  static String viewAccountTitle = 'View Account' ;
-  static String editAccountTitle = 'Edit Account';
+  static String addAccountTitle = 'Add Vault' ;
+  static String viewAccountTitle = 'View Vault' ;
+  static String editAccountTitle = 'Edit Vault';
 
 
   //Hive Storage name
   static String hiveStorageName = 'sivaji_secure';
+
+  static const String emptyIconPath = 'https://firebasestorage.googleapis.com/v0/b/everbrain-a6262.appspot.com/o/Company%20Logo%2Fempty_icon_2.png?alt=media&token=65e83cc8-8bd6-4401-aa67-aa8cb449b529';
 }

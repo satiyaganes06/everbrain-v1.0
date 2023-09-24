@@ -6,20 +6,22 @@ import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
 import '../Model/vault_model.dart';
+import '../Model/vault_password_model.dart';
+import 'hive_controller.getx.dart';
 
 class AddNewAccountController extends GetxController {
   final loginController = Get.find<LoginController>();
 
-  TextEditingController searchCompanyName = TextEditingController();
-  TextEditingController companyName = TextEditingController();
-  TextEditingController emailRusernameRphone = TextEditingController();
-  TextEditingController password = TextEditingController();
-  TextEditingController hintPassword = TextEditingController();
+  TextEditingController vaultNameCtrl = TextEditingController();
+  TextEditingController vaultUsernameCtrl = TextEditingController();
+  TextEditingController vaultPasswordCtrl = TextEditingController();
+  TextEditingController vaultWebsiteURLCtrl = TextEditingController();
+  String? vaultWebsiteImageUrl = '';
   bool passwordToggle = true;
   bool isFavourite = false;
-  bool isReMpassNeeded = false;
+  bool isBiometricEnable = false;
+  var uuid = const Uuid();
 
-  int animationDuration = 100;
 
   var category_Selector_List = [false, false, false, false, false, false].obs;
   int current_index = 0;
@@ -41,6 +43,7 @@ class AddNewAccountController extends GetxController {
     'Shopping',
     'Others'
   ];
+
 
   void funPasswordToggle() {
     passwordToggle = !passwordToggle;
@@ -137,24 +140,42 @@ class AddNewAccountController extends GetxController {
   }
 
   void reMpassNeededToggle() {
-    isReMpassNeeded = !isReMpassNeeded;
+    isBiometricEnable = !isBiometricEnable;
     update();
   }
 
-  Vault getVaultObject() {
-    var uuid = const Uuid();
+  Vault getVaultObject(String uuid) {
+    
 
     return Vault(
         userID: loginController.firebaseService.currentUser!.uid.toString(),
-        vaultID: uuid.v4(),
-        sourceName: companyName.text.toString(),
-        sourceImageUrl: isUrl(searchCompanyName.text.toString()) ? searchCompanyName.text.toString() : 'https://www.usbforwindows.com/storage/img/images_3/function_set_default_image_when_image_not_present.png' ,
-        vaultName: emailRusernameRphone.text,
-        vaultPassword: password.text,
-        hintPassword: hintPassword.text,
+        vaultID: uuid,
+        vaultName: vaultNameCtrl.text.toString(),
+        websiteUrl: vaultWebsiteURLCtrl.text.toString(),
+        websiteImageUrl: vaultWebsiteImageUrl.toString() ,
+        username: vaultUsernameCtrl.text,
         vaultCategory: category_Button_Image_title[current_index].toString(),
         isFavourite: isFavourite,
-        isMPUnlock: isReMpassNeeded);
+        isBiometricUnlock: isBiometricEnable);
+  }
+
+  VaultPassword getVaultPassObject(String uuid) {
+    return VaultPassword( 
+      valuePasswordKYS: uuid.toString(),
+      vaultPassword: vaultPasswordCtrl.text
+    );
+  }
+
+  addAccountFun()async{
+
+    final hiveCtrl = Get.find<HiveController>();
+
+    String id = uuid.v4();
+
+    getVaultObject(id);
+    getVaultPassObject(id);
+
+    await hiveCtrl.addVault(getVaultObject(id), getVaultPassObject(id), Get.context!);
   }
 
   bool isUrl(String input) {

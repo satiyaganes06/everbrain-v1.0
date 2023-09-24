@@ -6,14 +6,13 @@ import 'package:hive/hive.dart';
 import '../../Model/vault_model.dart';
 import 'secure_storage_repository.dart';
 
-class HiveService{
-  static const _BOXNAME = 'vault_sivaji';
-  String get bOxName => _BOXNAME;
+class HiveVaultService{
+  static const _VAULTBOXNAME = 'vault_sivaji';
   
   Future<Box> openBox() async{
     final encryKeyHive =
-        await GetIt.I.get<LocalStorageSecure>().secureInitHive();
-    Box<Vault> box = await Hive.openBox<Vault>(_BOXNAME, encryptionCipher: HiveAesCipher(encryKeyHive));
+        await GetIt.I.get<LocalStorageSecure>().secureInitHiveVault();
+    Box<Vault> box = await Hive.openBox<Vault>(_VAULTBOXNAME, encryptionCipher: HiveAesCipher(encryKeyHive));
 
     return box;
   }
