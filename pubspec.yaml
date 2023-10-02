@@ -67,6 +67,10 @@ dependencies:
   shimmer: ^3.0.0
   flutter_cache_manager: ^3.3.1
   dot_navigation_bar: ^1.0.2
+  change_app_package_name: ^1.1.0
+  huawei_safetydetect: ^6.4.0+302
+  webview_flutter: ^4.4.0
+  fluentui_system_icons: ^1.1.217
   
 
 dev_dependencies:
@@ -90,6 +94,7 @@ flutter:
     - assets/lottie/email_verification_animation.json
     - assets/lottie/forgot_password_animation.json
     - assets/lottie/splash_screen_Animation.json
+    - assets/lottie/
     - assets/images/
 
 

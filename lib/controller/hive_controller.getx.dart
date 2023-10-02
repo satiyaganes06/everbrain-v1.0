@@ -2,7 +2,7 @@
 import 'package:everbrain/controller/add_new_account_controller.getx.dart';
 import 'package:everbrain/controller/edit_account_controller.getx.dart';
 import 'package:everbrain/presentation/Screens/main_screen/main_screen.dart';
-import 'package:everbrain/presentation/Widget/global_widget.dart';
+import 'package:everbrain/presentation/widget/global_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:everbrain/utils/colors.dart' as colors;

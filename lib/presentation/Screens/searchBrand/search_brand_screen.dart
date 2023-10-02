@@ -1,7 +1,7 @@
 
 import 'package:everbrain/Model/brand_model.dart';
-import 'package:everbrain/presentation/Widget/brand_item.dart';
-import 'package:everbrain/presentation/Widget/global_widget.dart';
+import 'package:everbrain/presentation/widget/brand_item.dart';
+import 'package:everbrain/presentation/widget/global_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/constants.dart' as constants;
@@ -9,7 +9,7 @@ import 'package:everbrain/utils/dimensions.dart' as dimens;
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../controller/search_brand_controller.getx.dart';
-import '../../Widget/appbar.dart';
+import '../../widget/appbar.dart';
 
 class SearchBrandScreen extends StatelessWidget {
   bool? isFromEdit;

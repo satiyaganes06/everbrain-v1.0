@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:everbrain/controller/add_new_account_controller.getx.dart';
 import 'package:everbrain/controller/password_generator.getx.dart';
+import 'package:everbrain/controller/signup_controller.getx.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/dimensions.dart' as dimens;
 import 'package:flutter/material.dart';
@@ -49,6 +51,11 @@ textField(
           fontSize: 14,
           color: colors.AppColor.accentColor,
         ),
+        onChanged: (value) {
+          if(label == 'URL'){
+            Get.find<AddNewAccountController>().checkUrl(value);
+          }
+        },
         decoration: InputDecoration(
             filled: true,
             fillColor: colors.AppColor.lightGrey,
@@ -69,10 +76,10 @@ textField(
             ),
             labelText: label,
             labelStyle: GoogleFonts.poppins(
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w500,
                 fontSize: 12,
                 color: colors.AppColor.subtitle2Color,
-                letterSpacing: 0.5),
+                letterSpacing: 0.3),
             contentPadding: EdgeInsets.symmetric(
                 horizontal:
                     dimens.Dimens.textFieldContentHorizontalPaddingSignUp,
@@ -86,7 +93,8 @@ textField(
                   ),
                   fit: BoxFit.cover,
                 )
-                : const SizedBox()),
+                : const SizedBox(),),
+            
         validator: (value) {
           switch (textInputType) {
             case TextInputType.emailAddress:
@@ -97,9 +105,26 @@ textField(
 
             case TextInputType.text:
               if (value!.isEmpty) {
+
                 return 'Please enter your ${label.toLowerCase()}';
+                
+                
+              }else{
+                if(label == 'Master Password Hints'){
+                  
+                  final signUpCtrl = Get.find<SignUpController>();
+
+                  if(signUpCtrl.isHintValid() == false){
+                    return 'Do not use your master password in hints';
+                  }else{
+                    return null;
+                  }
+                }else{
+                  return null;
+                }
+                
               }
-              return null;
+             
 
             default:
               return null;

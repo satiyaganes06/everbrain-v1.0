@@ -28,9 +28,10 @@ class SignInButton extends StatelessWidget {
         child: InkWell(
           onTap: (){
             if(formkey.currentState!.validate()){
-              signUpController.sigUpFun(context);
+              //signUpController.sigUpFun(context);
+              signUpController.userDetectionFun(context);
             }
-            print(signUpController.passwordField.text);
+           
             
           },
           splashColor: colors.AppColor.splashColor,

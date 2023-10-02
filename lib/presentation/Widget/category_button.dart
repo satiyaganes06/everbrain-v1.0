@@ -1,4 +1,4 @@
-import 'package:everbrain/presentation/Widget/space.dart';
+import 'package:everbrain/presentation/widget/space.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';

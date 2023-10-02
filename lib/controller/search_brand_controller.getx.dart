@@ -74,10 +74,9 @@ class SearchBrandController extends GetxController{
  }
 
  returnEditResult(Brand brand){
-  print(brand.name);
     Get.find<EditAccountController>().vaultNameCtrl.text = brand.name;
-    Get.find<EditAccountController>().vaultWebsiteURLCtrl = brand.icons;
-    Get.back();
+    Get.find<EditAccountController>().vaultWebsiteURLCtrl.text = brand.icons;
+    Get.back(result: brand);
  }
 
  

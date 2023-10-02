@@ -24,11 +24,12 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.huawei.agconnect'
 
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -56,12 +57,29 @@ android {
         multiDexEnabled true
     }
 
+    signingConfigs { 
+        release { 
+            storeFile file('mykeystore.jks') 
+            keyAlias 'everbrain' 
+            keyPassword '123456' 
+            storePassword '123456' 
+            v1SigningEnabled true 
+            v2SigningEnabled true 
+        } 
+    
+    } 
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release 
         }
+        debug {
+            signingConfig signingConfigs.release 
+        }
+
     }
 }
 
@@ -73,4 +91,6 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:30.3.2')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.huawei.agconnect:agconnect-core:1.5.2.300'
 }
+

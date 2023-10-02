@@ -11,7 +11,7 @@ import '../core/localServices/local_auth.dart';
 import '../presentation/Screens/dashboard/dashboard_Screen.dart';
 import '../presentation/Screens/accountOpt/editAccount/edit_account_screen.dart';
 import '../core/localServices/secure_storage_repository.dart';
-import '../presentation/Widget/global_widget.dart';
+import '../presentation/widget/global_widget.dart';
 import 'dashboard_controller.getx.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/keys.dart' as KY;
@@ -139,7 +139,7 @@ class FlutterEncryController extends GetxController{
           break;
 
         case _optEdit:
-          Get.to(EditAccountScreen(vault: vault ?? Vault(
+          Get.to(() => EditAccountScreen(vault: vault ?? Vault(
               userID: '',
             vaultID: '',
             vaultName: '',

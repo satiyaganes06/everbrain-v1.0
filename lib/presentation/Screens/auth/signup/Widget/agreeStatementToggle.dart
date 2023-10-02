@@ -9,6 +9,7 @@ import 'package:everbrain/utils/dimensions.dart' as dimens;
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../../controller/signup_controller.getx.dart';
+import '../term_agreement_screen.dart';
 
 class AgreementStatementToggle extends StatelessWidget {
   AgreementStatementToggle({Key? key}) : super(key: key);
@@ -36,16 +37,21 @@ class AgreementStatementToggle extends StatelessWidget {
               },
             ),
 
-            Text(constants.Constants.agreementStatementSignUp, 
-              style: GoogleFonts.poppins(
+            TextButton(
+              onPressed: (){
+                Get.to(TermAndAgreementScreen());
+              },
+              child: Text(constants.Constants.agreementStatementSignUp, style: GoogleFonts.poppins(
                 color: colors.AppColor.primaryColor,
                 fontWeight: FontWeight.w500,
                 fontSize: dimens.Dimens.agreementToggleFontSizeSignUp
-              ),
+              )), 
             ),
           ]
         )
       )
     );
   }
+
+  
 }

@@ -11,15 +11,15 @@ import 'package:everbrain/controller/add_new_account_controller.getx.dart';
 import 'package:everbrain/controller/dashboard_controller.getx.dart';
 import 'package:everbrain/controller/password_generator.getx.dart';
 import 'package:everbrain/model/brand_model.dart';
-import 'package:everbrain/presentation/Widget/space.dart';
+import 'package:everbrain/presentation/widget/space.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/constants.dart' as constants;
 import 'package:everbrain/utils/dimensions.dart' as dimens;
 
-import '../../../Widget/appbar.dart';
-import '../../../Widget/category_button.dart';
-import '../../../Widget/global_widget.dart';
-import '../../../Widget/subtitle_font copy.dart';
+import '../../../widget/appbar.dart';
+import '../../../widget/category_button.dart';
+import '../../../widget/global_widget.dart';
+import '../../../widget/subtitle_font copy.dart';
 import '../../dashboard/dashboard_Screen.dart';
 
 class AddNewAccount extends StatefulWidget {
@@ -68,7 +68,7 @@ class _AddNewAccountState extends State<AddNewAccount> {
                 key: formkey,
                 child: Center(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Space(Get.height * 0.03),
                       titleWidget('Vault Information'),
@@ -219,6 +219,21 @@ class _AddNewAccountState extends State<AddNewAccount> {
                               false,
                               false,
                               false)),
+                      Space(Get.height * 0.01),
+                      Obx(() => DelayedDisplay(
+                        delay: Duration(milliseconds:
+                                  dimens.Dimens.delayAnimationLogInPage),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: Text(addNewAccountController.urlCheckResult.value,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(
+                                  color: addNewAccountController.urlCheckResultColor.value,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12)),
+                        )
+                      )),
                       Space(Get.height * 0.03),
                       titleWidget('Category'),
                       Space(Get.height * 0.01),
@@ -296,7 +311,9 @@ class _AddNewAccountState extends State<AddNewAccount> {
                               ]));
                         }),
                       ),
+
                       Space(Get.height * 0.03),
+
                       DelayedDisplay(
                         delay: Duration(
                             milliseconds:
@@ -306,27 +323,30 @@ class _AddNewAccountState extends State<AddNewAccount> {
                             borderRadius: BorderRadius.circular(20),
                             shadowColor: Colors.grey[200],
                             elevation: 6.1,
-                            child: InkWell(
-                              onTap: () {
-                                if (formkey.currentState!.validate()) {
-                                  addNewAccountController.addAccountFun();
+                            child: Obx(()  {
+                                return InkWell(
+                                  onTap:  addNewAccountController.isSubmitBtnEnable.value ? (){
+                                    if (formkey.currentState!.validate()) {
+                                      addNewAccountController.addAccountFun();
 
-                                  Get.offAll(const MainScreen());
-                                }
-                              },
-                              borderRadius: BorderRadius.circular(20),
-                              child: Container(
-                                width: double.infinity,
-                                height: 60,
-                                color: Colors.transparent,
-                                child: Center(
-                                    child: Text(
-                                  'Save Account',
-                                  style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white),
-                                )),
-                              ),
+                                      Get.offAll(const MainScreen());
+                                    }
+                                  } : null,
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 60,
+                                    color: Colors.transparent,
+                                    child: Center(
+                                        child: Text(
+                                      'Save Account',
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white),
+                                    )),
+                                  ),
+                                );
+                              }
                             )),
                       ),
                       Space(50)

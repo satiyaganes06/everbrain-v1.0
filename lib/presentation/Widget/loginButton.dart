@@ -27,7 +27,7 @@ class LoginButton extends StatelessWidget {
         child: InkWell(
           onTap: (){
             if(formkey.currentState!.validate()){
-              loginController.firebaseService.signIn(loginController.email_field.text, loginController.password_field.text, context);
+              loginController.userDetectionFun(context);
             }
             
           },

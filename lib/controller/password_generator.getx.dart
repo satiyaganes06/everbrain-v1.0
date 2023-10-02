@@ -76,7 +76,7 @@ class PasswordGenerator extends GetxController {
       passwordStrengthText.value = 'Unbreakable';
       passwordStrengthColor.value = colors.AppColor.success;
     }
-    HapticFeedback.heavyImpact();
+    HapticFeedback.lightImpact();
     passwordStrengthTextFun(value);
   }
 
@@ -243,4 +243,5 @@ class PasswordGenerator extends GetxController {
       );
     });
   }
+
 }

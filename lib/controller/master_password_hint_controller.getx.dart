@@ -1,11 +1,13 @@
 import 'package:emailjs/emailjs.dart';
 import 'package:everbrain/core/localServices/device_info.dart';
-import 'package:everbrain/presentation/Widget/global_widget.dart';
-import 'package:everbrain/presentation/Widget/loading.dart';
+import 'package:everbrain/core/networkService/hms_respository_impl.dart';
+import 'package:everbrain/presentation/widget/global_widget.dart';
+import 'package:everbrain/presentation/widget/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:get/get.dart';
 
+import '../core/networkService/hms_respository.dart';
 import 'login_controller.getx.dart';
 
 class MasterPassswordHintController extends GetxController {
@@ -59,9 +61,22 @@ class MasterPassswordHintController extends GetxController {
     }
   }
 
+  Future<void> userDetectionFun(BuildContext context) async {
+    await GetIt.I.get<HmsRepository>().userDetection().then((token) {
+      
+      if(token != null){
+        sendHintToEmail(context);
+      }else{
+        failMessage(context, 'User not verified');
+      }
+    });
+    
+  }
+
   @override
   void dispose() {
     emailTextController.dispose();
+    GetIt.I.get<HmsRepositoryImpl>().shutdownUserDetect();
     super.dispose();
   }
 }

@@ -12,15 +12,18 @@ class LocalAuthController extends GetxController{
   String userID = '';
   var id;
   String email = '';
+  Rx<bool> isLoading = false.obs;
   Rx<bool> isUnlock = false.obs;
   final passcodeController = TextEditingController();
 
   @override
   onInit() async{
+    isLoading.value = true;
     id = await GetIt.I.get<LocalStorageSecure>().getString('userID');
     email = await GetIt.I.get<LocalStorageSecure>().getString(KY.KYS.emailKey + id.toString()) ?? '';
     update(['email_string']);
     await getPasscode();
+    isLoading.value = false;
     super.onInit();
   }
 

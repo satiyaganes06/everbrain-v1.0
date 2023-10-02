@@ -12,6 +12,8 @@ import 'package:everbrain/utils/colors.dart' as colors;
 import 'main_module.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
+import 'presentation/Screens/auth/local_auth/local_auth_screen.dart';
+
 Future<void> main() async {
   
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,9 +35,37 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key})
-      : super(key: key);
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver{
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state){
+    if(state == AppLifecycleState.inactive  || state == AppLifecycleState.detached) return;
+      
+    final isBackground = state == AppLifecycleState.paused;
+
+    if(isBackground){
+      Get.offAll(LocalAuthScreen());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

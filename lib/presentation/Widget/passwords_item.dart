@@ -36,9 +36,16 @@ class PasswordItem extends StatelessWidget {
             
             Get.to(() => ViewVaultScreen(vault: vaultInfo));
           },
+          
+            splashColor: Colors.transparent,
+            focusColor:  Colors.transparent,
+            hoverColor: Colors.transparent,
           borderRadius: BorderRadius.circular(10),
           child: ListTile(
             tileColor: colors.AppColor.secondaryColor,
+            splashColor: Colors.transparent,
+            focusColor:  Colors.transparent,
+            hoverColor: Colors.transparent,
             leading: OctoImage.fromSet(
                   width: Get.height*0.06,
                   image: CachedNetworkImageProvider(vaultInfo.websiteImageUrl, cacheManager: customCacheManager),

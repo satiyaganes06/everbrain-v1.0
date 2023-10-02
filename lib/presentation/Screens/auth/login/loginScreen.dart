@@ -1,7 +1,7 @@
 // ignore_for_file: sort_child_properties_last
 import 'package:delayed_display/delayed_display.dart';
-import 'package:everbrain/presentation/Widget/pageTitle.dart';
-import 'package:everbrain/presentation/Widget/space.dart';
+import 'package:everbrain/presentation/widget/pageTitle.dart';
+import 'package:everbrain/presentation/widget/space.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
@@ -10,12 +10,13 @@ import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/constants.dart' as constants;
 import 'package:everbrain/utils/dimensions.dart' as dimens;
 
-import '../../../Widget/emailField.dart';
-import '../../../Widget/getHint.dart';
-import '../../../Widget/loginButton.dart';
-import '../../../Widget/lottieAnimation.dart';
-import '../../../Widget/mPasswordField.dart';
-import '../../../Widget/rowNotMember.dart';
+import '../../../Widget/global_widget.dart';
+import '../../../widget/emailField.dart';
+import '../../../widget/getHint.dart';
+import '../../../widget/loginButton.dart';
+import '../../../widget/lottieAnimation.dart';
+import '../../../widget/mPasswordField.dart';
+import '../../../widget/rowNotMember.dart';
 
 class LoginScreen extends StatelessWidget {
   final formkey= GlobalKey<FormState>();
@@ -55,7 +56,10 @@ class LoginScreen extends StatelessWidget {
                   
                   Space(dimens.Dimens.bottomLottieSpaceLogIn),
                   
-                  EmailFieldLogin(),
+                  DelayedDisplay(
+                    delay: Duration(milliseconds:dimens.Dimens.delayAnimationSignUpPage),
+                    child: textField(loginController.email_field, 'Email', TextInputType.emailAddress, false, false, false, false),
+                  ),
                   
                   Space(dimens.Dimens.bottomEmailFieldSpaceLogIn),
                   

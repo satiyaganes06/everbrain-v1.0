@@ -25,25 +25,36 @@ class ConfirmMasterPasswordField extends StatelessWidget {
               cursorColor: colors.AppColor.primaryColor,
               obscureText: true,
               decoration: InputDecoration(
-                filled: true,
-                fillColor: colors.AppColor.lightGrey,
-                enabledBorder: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(width: 0, color: colors.AppColor.lightGrey),
-                  borderRadius: BorderRadius.circular(
-                      dimens.Dimens.confirmMasterPasswordContainerBorderSignUp),
+                  filled: true,
+                  fillColor: colors.AppColor.lightGrey,
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide:
+                        BorderSide(width: 0, color: colors.AppColor.lightGrey),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  focusedErrorBorder: UnderlineInputBorder(
+                    borderSide:
+                        BorderSide(width: 0, color: colors.AppColor.lightGrey),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide:
+                        BorderSide(width: 0, color: colors.AppColor.lightGrey),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  labelText: "Confirm Master Password",
+                  labelStyle: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12,
+                      color: colors.AppColor.subtitle2Color,
+                      letterSpacing: 0.3),
+                  contentPadding: EdgeInsets.symmetric(
+                      horizontal:
+                          dimens.Dimens.textFieldContentHorizontalPaddingSignUp,
+                      vertical:
+                          dimens.Dimens.textFieldContentVerticalPaddingSignUp),
+                  
                 ),
-                hintText: constants.Constants.confirmMasterPasswordFieldSignUp,
-                hintStyle: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w500,
-                  fontSize: dimens.Dimens.confirmMasterPasswordFontSizeSignUp,
-                ),
-                contentPadding: EdgeInsets.symmetric(
-                    horizontal: dimens.Dimens
-                        .confirmMasterPasswordContentHorizontalPaddingSignUp,
-                    vertical: dimens.Dimens
-                        .confirmMasterPasswordContentVerticalPaddingSignUp),
-              ),
               validator: (value) {
                 
                 if (value!.isEmpty) {

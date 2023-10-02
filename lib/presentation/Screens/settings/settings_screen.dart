@@ -1,7 +1,8 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:everbrain/controller/setting_controller.getx.dart';
 import 'package:everbrain/presentation/Screens/auth/local_auth/local_auth_screen.dart';
-import 'package:everbrain/presentation/Widget/space.dart';
+import 'package:everbrain/presentation/Screens/securityQuestion/security_screen.dart';
+import 'package:everbrain/presentation/widget/space.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,8 +10,8 @@ import 'package:iconsax/iconsax.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/dimensions.dart' as dimens;
 import '../../../controller/login_controller.getx.dart';
-import '../../Widget/appbar.dart';
-import '../../Widget/subtitle_font copy.dart';
+import '../../widget/appbar.dart';
+import '../../widget/subtitle_font copy.dart';
 import '../masterPasswordReq/master_password_hint_Screen.dart';
 
 class SettingScreen extends StatelessWidget {
@@ -131,6 +132,23 @@ class SettingScreen extends StatelessWidget {
                 
                 onTap: () {
                   Get.to(()=> PasswordHintScreen());
+                },
+              ),
+
+              ListTile(
+                leading: Icon(
+                  Icons.security_outlined,
+                  size: 20,
+                  color: colors.AppColor.tertiaryColor,
+                ),
+                title: Text("Security Questions",
+                    style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: colors.AppColor.tertiaryColor)),
+                
+                onTap: () {
+                  Get.to(()=> SecurityQuestionScreen());
                 },
               ),
 

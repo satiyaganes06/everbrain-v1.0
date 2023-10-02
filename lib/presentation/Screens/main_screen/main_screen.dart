@@ -4,9 +4,11 @@ import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/presentation/Screens/dashboard/dashboard_Screen.dart';
 import 'package:everbrain/presentation/Screens/passwordGenerator/password_generator_screen.dart';
 import 'package:everbrain/presentation/Screens/settings/settings_screen.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:iconsax/iconsax.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import '../../../controller/b_navigator_controller.getx.dart';
 
 class MainScreen extends StatelessWidget  {
@@ -32,25 +34,25 @@ class MainScreen extends StatelessWidget  {
   }
 
   buildBottomNavigationMenu(context, navi) {
-    return  Obx(() => DotNavigationBar(
+    return Obx(() => DotNavigationBar(
             currentIndex: navi.currentIndex.value,
             onTap: navi.changeTabIndex,
             enableFloatingNavBar:true,
             backgroundColor: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: colors.AppColor.accentColor.withOpacity(0.2),
-                blurRadius: 5,
+                color: colors.AppColor.accentColor.withOpacity(0.1),
+                blurRadius: 3,
                 offset: const Offset(0, 0),
               ),
             ],
             marginR : const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
             paddingR: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
-            borderRadius :  0,  
+            borderRadius :  0, 
             items: [
               //Basic Sliver Bar
               DotNavigationBarItem(
-                icon: const Icon(Icons.lock_outline_rounded),
+                icon: const Icon(FluentIcons.home_12_regular),
                // icon: SvgPicture.asset("assets/icons/menu-scale.svg", color: colors.AppColor.accentColor, width: 20, height: 20,),
                 selectedColor: colors.AppColor.primaryColor,
                 unselectedColor: colors.AppColor.tertiaryColor,

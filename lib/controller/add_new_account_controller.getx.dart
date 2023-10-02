@@ -1,10 +1,12 @@
 
 import 'package:everbrain/controller/login_controller.getx.dart';
+import 'package:everbrain/core/networkService/hms_respository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:uuid/uuid.dart';
-
+import 'package:everbrain/utils/colors.dart' as colors;
 import '../Model/vault_model.dart';
 import '../Model/vault_password_model.dart';
 import 'hive_controller.getx.dart';
@@ -21,6 +23,10 @@ class AddNewAccountController extends GetxController {
   bool isFavourite = false;
   bool isBiometricEnable = false;
   var uuid = const Uuid();
+
+  Rx<String> urlCheckResult = 'No threats found'.obs;
+  Rx<Color> urlCheckResultColor = colors.AppColor.success.obs;
+  Rx<bool> isSubmitBtnEnable = true.obs;
 
 
   var category_Selector_List = [false, false, false, false, false, false].obs;
@@ -186,5 +192,38 @@ class AddNewAccountController extends GetxController {
     );
 
     return urlPattern.hasMatch(input);
+  }
+
+  Future<void> checkUrl(String url) async{
+    if(url.isNotEmpty){
+      await GetIt.I.get<HmsRepository>().urlCheck(url).then((result) {
+        if(result.length >0){
+          urlCheckResultColor.value = colors.AppColor.fail;
+          urlCheckResult.value = '${result.length} threat is detected for the URL: $url';
+          isSubmitBtnEnable.value = false;
+        }else{
+          urlCheckResultColor.value = colors.AppColor.success;
+          urlCheckResult.value = 'No threats found';
+          isSubmitBtnEnable.value = true;
+        }
+      });
+    }else{
+      urlCheckResultColor.value = colors.AppColor.success;
+      urlCheckResult.value = 'No threats found';
+      isSubmitBtnEnable.value = true;
+    }
+  }
+
+
+  @override
+  void onInit() {
+    
+    super.onInit();
+  }
+
+  @override
+  void dispose() {
+    GetIt.I.get<HmsRepository>().shutdownUrlCheck();
+    super.dispose();
   }
 }

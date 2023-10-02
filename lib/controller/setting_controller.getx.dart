@@ -1,6 +1,6 @@
 import 'package:everbrain/controller/local_auth_controller.getx.dart';
 import 'package:everbrain/core/localServices/local_auth.dart';
-import 'package:everbrain/presentation/Widget/global_widget.dart';
+import 'package:everbrain/presentation/widget/global_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -42,6 +42,7 @@ class SettingController extends GetxController {
       } else {
         // ignore: use_build_context_synchronously
         Navigator.pop(context);
+        
         failMessage(
             context, 'Your device does not support biometric authentication');
       }
@@ -102,8 +103,10 @@ class SettingController extends GetxController {
       currentPasscodeOption.value =
         await GetIt.I.get<LocalStorageSecure>().getString(KY.KYS.isPasscode + userID) ??
             'off';
+                  
     } catch (e) {
       currentPasscodeOption.value = 'off';
+
     }
   }
 
@@ -135,6 +138,8 @@ class SettingController extends GetxController {
 
    //
       try {
+        currentBiometricOption.value = 'off';
+        currentPasscodeOption.value = 'off';
         loginContrl.firebaseService.signOut();
       } catch (e) {
         failMessage(context, 'Log out error. Try again in while');

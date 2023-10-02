@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:everbrain/presentation/Screens/auth/login/loginScreen.dart';
 import 'package:everbrain/presentation/Screens/dashboard/dashboard_Screen.dart';
 import 'package:everbrain/presentation/Screens/main_screen/main_screen.dart';
+import 'package:everbrain/presentation/Widget/global_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,13 +12,14 @@ import '../../controller/login_controller.getx.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import '../../presentation/Screens/auth/emailVerification/email_verify_Screen.dart';
 import '../../presentation/Screens/auth/widget_Tree.dart';
-import '../../presentation/Widget/loading.dart';
+import '../../presentation/widget/loading.dart';
 import '../localServices/secure_storage_repository.dart';
 
 class FirebaseService {
   final _firebaseAuth = FirebaseAuth.instance;
   final _fireStore = FirebaseFirestore.instance;
   final _collectionHintName = 'userHints';
+  final _collectionSecurityQuesName = 'userSecurityQuestions';
   var userID ;
 
 
@@ -191,8 +193,12 @@ class FirebaseService {
   }
 
   Future checkEmailVerified(RxBool isEmailVerified) async {
-    await _firebaseAuth.currentUser!.reload();
-    isEmailVerified.value = _firebaseAuth.currentUser!.emailVerified;
+    try {
+      await _firebaseAuth.currentUser!.reload();
+      isEmailVerified.value = _firebaseAuth.currentUser!.emailVerified;
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Future resetPassword(String _email, var context) async {
@@ -253,4 +259,71 @@ class FirebaseService {
     }
   }
 
+  Future<bool> saveSecurityQuestion(List<String> questions, String answer1, String answer2, String answer3, String answer4, BuildContext context) async{
+    var data = {
+      'userID': _firebaseAuth.currentUser!.uid.toString(),
+    };
+
+    List<String> answers = [answer1, answer2, answer3, answer4];
+
+    for(int i = 0; i < questions.length; i++){
+      data.addAll({questions[i] : answers[i]});
+    }
+
+    await _fireStore.collection(_collectionSecurityQuesName).add(data).whenComplete(() {
+      return true;
+      
+    })
+    .catchError((onError, stackTrace){
+      return false;
+     
+    });
+
+    return false;
+  }
+
+  Future<bool> updateSecurityQuestion(List<String> questions, String answer1, String answer2, String answer3, String answer4, BuildContext context, String docID) async{
+    var data = {
+      'userID': _firebaseAuth.currentUser!.uid.toString(),
+    };
+
+    List<String> answers = [answer1, answer2, answer3, answer4];
+
+    for(int i = 0; i < questions.length; i++){
+      data.addAll({questions[i] : answers[i]});
+    }
+
+
+    await _fireStore.collection(_collectionSecurityQuesName).doc(docID).update(data).whenComplete(() {
+      return true;
+      
+    })
+    .catchError((onError, stackTrace){
+      return false;
+     
+    });
+
+    return false;
+  }
+
+
+  Future<List<dynamic>?> getSecurityQuestion() async{
+    final hintDoc = await _fireStore.collection(_collectionSecurityQuesName).where('userID', isEqualTo: _firebaseAuth.currentUser!.uid).get();
+   // Map<String, dynamic> userData = hintDoc.data() as Map<String, dynamic>;
+   if (hintDoc.docs.isNotEmpty) {
+      // Get the first document (assuming user IDs are unique)
+      DocumentSnapshot userDocument = hintDoc.docs[0];
+      
+      // Access the data within the document
+      Map<String, dynamic> userData = userDocument.data() as Map<String, dynamic>;
+      return [
+        userData,
+        userDocument.id
+      ];
+
+    }else{
+
+      return null;
+    }
+  }
 }

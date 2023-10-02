@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
 class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
   
   @override
   Widget build(BuildContext context) {
@@ -12,25 +13,26 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         height: double.infinity,
-        color: colors.AppColor.primaryColor,
+        color: colors.AppColor.secondaryColor,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Lottie.asset(
-                'assets/lottie/splash_screen_Animation.json',
-                height: hEgth*0.1
-              ),
-              Text(
-                'Everbrain',
-                style: GoogleFonts.poppins(
-                    color: colors.AppColor.secondaryColor,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1,
-                    fontSize: 21
-                ),
-              )
+              // Lottie.asset(
+              //   'assets/lottie/splash_screen_Animation.json',
+              //   height: hEgth*0.1
+              // ),
+              // Text(
+              //   'Everbrain',
+              //   style: GoogleFonts.poppins(
+              //       color: colors.AppColor.secondaryColor,
+              //       fontWeight: FontWeight.bold,
+              //       letterSpacing: 1,
+              //       fontSize: 21
+              //   ),
+              // )
+              Image.asset('assets/images/app_logo_2.png', height: hEgth*0.2, width: hEgth*0.2,)
             ]
           ),
         ),

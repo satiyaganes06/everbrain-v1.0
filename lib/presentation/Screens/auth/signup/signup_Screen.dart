@@ -1,6 +1,7 @@
 // ignore_for_file: sort_child_properties_last
 import 'package:delayed_display/delayed_display.dart';
 import 'package:everbrain/controller/login_controller.getx.dart';
+import 'package:everbrain/presentation/widget/global_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
@@ -8,8 +9,8 @@ import 'package:everbrain/utils/constants.dart' as constants;
 import 'package:everbrain/utils/dimensions.dart' as dimens;
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
-import '../../../Widget/pageTitle.dart';
-import '../../../Widget/space.dart';
+import '../../../widget/pageTitle.dart';
+import '../../../widget/space.dart';
 import 'Widget/agreeStatementToggle.dart';
 import 'Widget/confirmMPasswordField.dart';
 import 'Widget/emailField.dart';
@@ -60,7 +61,12 @@ class SignUpScreen extends StatelessWidget {
                   
                   Space(dimens.Dimens.bottomTitleSpaceSignUp),
                   
-                  EmailFieldSignUp(),
+                  //EmailFieldSignUp(),
+
+                  DelayedDisplay(
+                    delay: Duration(milliseconds:dimens.Dimens.delayAnimationSignUpPage),
+                    child: textField(signUpController.emailField, 'Email', TextInputType.emailAddress, false, false, false, false),
+                  ),
                   
                   Space(dimens.Dimens.bottomEmailFieldSpaceSignUp),
                   
@@ -76,7 +82,11 @@ class SignUpScreen extends StatelessWidget {
                   
                   Space(dimens.Dimens.bottomConfirmMasterPasswordDescriptionFieldSpaceSignUp),
                   
-                  MasterPasswordHint(),
+                  //MasterPasswordHint(),
+                  DelayedDisplay(
+                    delay: Duration(milliseconds:dimens.Dimens.delayAnimationSignUpPage),
+                    child: textField(signUpController.passwordHints, 'Master Password Hints', TextInputType.text, false, false, false, false),
+                  ),
                   
                   Space(dimens.Dimens.bottomMasterPasswordHintSpaceSignUp),
                   

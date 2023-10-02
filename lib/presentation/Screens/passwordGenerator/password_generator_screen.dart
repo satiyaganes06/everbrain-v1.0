@@ -1,13 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:everbrain/presentation/Widget/space.dart';
+import 'package:everbrain/presentation/widget/space.dart';
 import 'package:flutter/material.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import '../../../controller/password_generator.getx.dart';
-import '../../Widget/appbar.dart';
-import '../../Widget/global_widget.dart';
+import '../../widget/appbar.dart';
+import '../../widget/global_widget.dart';
 
 class PasswordGeneratorScreen extends StatelessWidget {
   const PasswordGeneratorScreen({super.key});
@@ -126,8 +126,8 @@ class PasswordGeneratorScreen extends StatelessWidget {
           Obx(() => Slider(
                 min: 4.0,
                 max: 64.0,
-                thumbColor: colors.AppColor.accentColor,
-                activeColor: colors.AppColor.accentColor,
+                thumbColor: colors.AppColor.tertiaryColor,
+                activeColor: colors.AppColor.tertiaryColor,
                 inactiveColor: colors.AppColor.lightGrey,
                 value: passGeneratorCtrl.characterLength.value,
                 onChanged: (value) {
@@ -172,7 +172,7 @@ class PasswordGeneratorScreen extends StatelessWidget {
                     height: Get.height * 0.05,
                     width: Get.height * 0.08,
                     decoration: BoxDecoration(
-                      color: colors.AppColor.accentColor,
+                      color: colors.AppColor.tertiaryColor,
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(50),
                         bottomLeft: Radius.circular(50),
@@ -180,7 +180,7 @@ class PasswordGeneratorScreen extends StatelessWidget {
                     ),
                     child: Icon(
                       Icons.refresh_rounded,
-                      size: 30,
+                      size: 25,
                       color: colors.AppColor.secondaryColor,
                     ),
                   )),
@@ -195,14 +195,14 @@ class PasswordGeneratorScreen extends StatelessWidget {
                     height: Get.height * 0.05,
                     width: Get.height * 0.08,
                     decoration: BoxDecoration(
-                      color: colors.AppColor.accentColor,
+                      color: colors.AppColor.tertiaryColor,
                       borderRadius: const BorderRadius.only(
                         topRight: Radius.circular(50),
                         bottomRight: Radius.circular(50),
                       ),
                     ),
                     child: Icon(Icons.copy_all_rounded,
-                        size: 26, color: colors.AppColor.secondaryColor),
+                        size: 23, color: colors.AppColor.secondaryColor),
                   ))
             ],
           )),

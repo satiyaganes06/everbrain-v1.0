@@ -4,8 +4,8 @@ import 'package:delayed_display/delayed_display.dart';
 import 'package:everbrain/controller/dashboard_controller.getx.dart';
 import 'package:everbrain/controller/flutter_encry_controller.getx.dart';
 import 'package:everbrain/presentation/Screens/searchBrand/search_brand_screen.dart';
-import 'package:everbrain/presentation/Widget/loading.dart';
-import 'package:everbrain/presentation/Widget/space.dart';
+import 'package:everbrain/presentation/widget/loading.dart';
+import 'package:everbrain/presentation/widget/space.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
@@ -17,13 +17,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:octo_image/octo_image.dart';
+import '../../../../Model/brand_model.dart';
 import '../../../../controller/edit_account_controller.getx.dart';
 import '../../../../Model/vault_model.dart';
 import '../../../../controller/hive_controller.getx.dart';
-import '../../../Widget/appbar.dart';
-import '../../../Widget/category_button.dart';
-import '../../../Widget/global_widget.dart';
-import '../../../Widget/subtitle_font copy.dart';
+import '../../../widget/appbar.dart';
+import '../../../widget/category_button.dart';
+import '../../../widget/global_widget.dart';
+import '../../../widget/subtitle_font copy.dart';
 import '../viewAccount/widget/view_text_field.dart';
 
 class EditAccountScreen extends StatefulWidget {
@@ -79,33 +80,43 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Space(Get.height * 0.03),
-                      titleWidget('Vault Information'),
-                      Space(Get.height * 0.02),
+                      //titleWidget('Vault Information'),
+                      //Space(Get.height * 0.02),
 
                       DelayedDisplay(
                         delay: Duration(
                             milliseconds:
                                 dimens.Dimens.delayAnimationLogInPage),
                         child: GestureDetector(
-                          onTap: (){
+                          onTap: () async{
                             
-                            var result = Get.to(()=>SearchBrandScreen(isFromEdit: true,));
+                            var result = await Get.to(()=>SearchBrandScreen(isFromEdit: true,));
 
-                            print(result);
+                            editAccountController.vaultNameEditCtrl.text = result.name;
+                            editAccountController.vaultWebsiteURLEditCtrl.text = result.domain;
+                            editAccountController.vaultWebsiteImageUrl = result.icons;
+
+                            editAccountController.update();
+
                           
                           },
-                          child: OctoImage.fromSet(
-                                          width: Get.height*0.04,
-                                          image: CachedNetworkImageProvider(widget.vault.websiteImageUrl),
-                                          octoSet: OctoSet.circleAvatar(
-                                            backgroundColor: colors.AppColor.secondaryColor, text: const Center(child: CircularProgressIndicator(),),
-                                          ),
-                                          fit: BoxFit.cover,
-                                        ),
+                          child: GetBuilder<EditAccountController>(
+                            builder: (_) {
+                              return OctoImage.fromSet(
+                                width: Get.height*0.06,
+                                image: CachedNetworkImageProvider(editAccountController.vaultWebsiteImageUrl ?? widget.vault.websiteImageUrl),
+                                octoSet: OctoSet.circleAvatar(
+                                  backgroundColor: colors.AppColor.secondaryColor, text: const Center(child: CircularProgressIndicator(),),
+                                ),
+                                fit: BoxFit.cover,
+                              );
+                            }
+                          ),
                         ),
                       ),
 
-                Space(Get.height * 0.02),
+                Space(Get.height * 0.03),
+
                       DelayedDisplay(
                         delay: Duration(
                             milliseconds:

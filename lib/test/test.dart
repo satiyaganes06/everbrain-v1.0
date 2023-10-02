@@ -1,190 +1,254 @@
+import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:developer' as developer;
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:huawei_safetydetect/huawei_safetydetect.dart';
 
-class Test extends StatefulWidget {
-  const Test({Key? key}) : super(key: key);
+class TestHMS extends StatefulWidget {
+  const TestHMS({Key? key}) : super(key: key);
 
   @override
-  State<Test> createState() => _TestState();
+  State<TestHMS> createState() => _TestHMSState();
 }
 
-class _TestState extends State<Test> {
+class _TestHMSState extends State<TestHMS> {
+  final List<String> logs = <String>[];
+  late final String appId;
+
+  @override
+  void initState() {
+    super.initState();
+    SafetyDetect.getAppID.then((String appId) {
+      this.appId = appId;
+      debugPrint('getAppID ' + 'App Id: $appId');
+    }).catchError((dynamic e) {
+      debugPrint('getAppID ' + e);
+    });
+  }
+
+  Future<dynamic> isVerifyAppsCheck() async {
+    return await SafetyDetect.isVerifyAppsCheck();
+  }
+
+  Future<dynamic> enableAppsCheck() async {
+    return await SafetyDetect.enableAppsCheck();
+  }
+
+  Future<dynamic> initUrlCheck() async {
+    return await SafetyDetect.initUrlCheck();
+  }
+
+  Future<dynamic> shutdownUrlCheck() async {
+    return await SafetyDetect.shutdownUrlCheck();
+  }
+
+  Future<dynamic> urlCheck() async {
+    const String url = 'http://example.com/hms/safetydetect/malware';
+    final List<UrlCheckThreat> result = await SafetyDetect.urlCheck(
+      url,
+      appId,
+      <UrlThreatType>[
+        UrlThreatType.malware,
+        UrlThreatType.phishing,
+      ],
+    );
+    return '${result.length} threat is detected for the URL: $url';
+  }
+
+  Future<dynamic> initUserDetect() async {
+    return await SafetyDetect.initUserDetect();
+  }
+
+  Future<dynamic> shutdownUserDetect() async {
+    return await SafetyDetect.shutdownUserDetect();
+  }
+
+  Future<dynamic> userDetection() async {
+    final String? token = await SafetyDetect.userDetection(appId);
+    return 'User verified, user token: $token';
+  }
+
+  Future<dynamic> initAntiFraud() async {
+    return await SafetyDetect.initAntiFraud(appId);
+  }
+
+  Future<dynamic> releaseAntiFraud() async {
+    return await SafetyDetect.releaseAntiFraud();
+  }
+
+  Future<dynamic> getRiskToken() async {
+    final String? riskToken = await SafetyDetect.getRiskToken();
+    return 'Risk Token: $riskToken';
+  }
+
+  Future<dynamic> sysIntegrity() async {
+    final List<int> randomIntegers = <int>[];
+    for (int i = 0; i < 24; i++) {
+      randomIntegers.add(math.Random.secure().nextInt(255));
+    }
+    final Uint8List nonce = Uint8List.fromList(randomIntegers);
+    final String result = await SafetyDetect.sysIntegrity(
+      nonce,
+      appId,
+      alg: 'RS256',
+    );
+    final List<String> jwsSplit = result.split('.');
+    final String decodedText = utf8.decode(base64Url.decode(jwsSplit[1]));
+    return json.decode(decodedText);
+  }
+
+  Future<dynamic> getWifiDetectStatus() async {
+    final WifiDetectResponse status = await SafetyDetect.getWifiDetectStatus();
+    return 'Wifi detect status is: ${status.getWifiDetectType}';
+  }
+
+  Future<dynamic> getMaliciousAppsList() async {
+    final List<MaliciousAppData> result =
+        await SafetyDetect.getMaliciousAppsList();
+    return '${result.length} malicious apps detected.';
+  }
+
+  void log(String method, dynamic message, [bool isSuccess = true]) {
+    final String status = isSuccess ? 'SUCCESS' : 'FAILURE';
+    final String logMessage = '$status\n${message ?? ''}'.trim();
+    developer.log(logMessage, name: method);
+    setState(() => logs.insert(0, '[$method]: $logMessage'));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // body: DelayedDisplay(
-      //                 delay: const Duration(milliseconds: 200),
-      //                 child: Stack(
-      //                   children: [
-      //                     Container(
-      //                       margin: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-      //                       child: GetBuilder<AddNewAccountController>(builder: (addNewAccountController){
-      //                           return CircleAvatar(
-      //                           radius: 61,
-      //                           backgroundColor: colors.AppColor.light_grey,
-      //                           child: CircleAvatar(
-      //                             radius: 55,
-      //                             backgroundColor: colors.AppColor.splashColor,
-      //                             backgroundImage: _buildImage(),
-      //                           ),
-      //                         );
-      //                       }),
-      //                       decoration: BoxDecoration(
-      //                         shape: BoxShape.circle,
-      //                         boxShadow: [
-      //                           BoxShadow(
-      //                             color: colors.AppColor.shadowColor,
-      //                             offset: const Offset(1, 2),
-      //                             blurRadius: 5,
-      //                             spreadRadius: 0.6,
-      //                           ), //BoxShadow
-      //                         ],
-      //                       ),
-      //                     ),
-      //                     Positioned(
-      //                         top: 105,
-      //                         left: 100,
-      //                         child: RawMaterialButton(
-      //                           elevation: 10,
-      //                           fillColor: colors.AppColor.accentColor,
-      //                           padding: const EdgeInsets.all(15.0),
-      //                           shape: const CircleBorder(),
-      //                           onPressed: () {
-      //                             showDialog(
-      //                                 context: context,
-      //                                 builder: (BuildContext context) {
-      //                                   return AlertDialog(
-      //                                     title: Text(
-      //                                       'Choose option',
-      //                                       style: TextStyle(
-      //                                           fontWeight: FontWeight.w600,
-      //                                           color: colors.AppColor.accentColor
-      //                                       ),
-      //                                     ),
-      //                                     content: SingleChildScrollView(
-      //                                       child: ListBody(
-      //                                         children: [
-                                                
-      //                                           InkWell(
-      //                                             onTap: (){
-      //                                               addNewAccountController.pickImageGallery();
-      //                                             },
-      //                                             splashColor: colors.AppColor.splashColor,
-      //                                             child: Row(
-      //                                               children: [
-      //                                                 Padding(
-      //                                                   padding:
-      //                                                       const EdgeInsets.all(8.0),
-      //                                                   child: Icon(
-      //                                                     Icons.image,
-      //                                                     color: colors.AppColor.secondaryColor,
-      //                                                   ),
-      //                                                 ),
-      //                                                 const Text(
-      //                                                   'Gallery',
-      //                                                   style: TextStyle(
-      //                                                       fontSize: 18,
-      //                                                       fontWeight:
-      //                                                           FontWeight.w500,
-      //                                                       color:
-      //                                                           Colors.black),
-      //                                                 )
-      //                                               ],
-      //                                             ),
-      //                                           ),
-      //                                             InkWell(
-      //                                             onTap: (){
-      //                                               Get.back();
-      //                                               showDialog(
-      //                                                 context: context,
-      //                                                 builder: (context) {
-      //                                                   return AlertDialog(
-      //                                                     title: Text('Enter website name'),
-      //                                                     content: TextField(
-      //                                                       controller: addNewAccountController.searchCompanyName,
-      //                                                       decoration: InputDecoration(hintText: "instagram"),
-      //                                                     ),
-      //                                                     actions: <Widget>[
-      //                                                       FlatButton(
-      //                                                         child: Text('Discard'),
-      //                                                         onPressed: () {
-      //                                                           Get.back();
-      //                                                         },
-      //                                                       ),
-      //                                                       FlatButton(
-      //                                                         child: Text('Search'),
-      //                                                         onPressed: () {
-      //                                                           addNewAccountController.pickImageOnline();
-                                                                
-      //                                                         },
-      //                                                       ),
-      //                                                     ],
-      //                                                   );
-      //                                                 },
-      //                                               );
-      //                                             },
-      //                                             splashColor: colors.AppColor.splashColor,
-      //                                             child: Row(
-      //                                               children: [
-      //                                                 Padding(
-      //                                                   padding:
-      //                                                       const EdgeInsets.all(8.0),
-      //                                                   child: Icon(
-      //                                                     Icons.cloud_download_rounded,
-      //                                                     color: colors.AppColor.secondaryColor,
-      //                                                   ),
-      //                                                 ),
-      //                                                 const Text(
-      //                                                   'Online',
-      //                                                   style: TextStyle(
-      //                                                       fontSize: 18,
-      //                                                       fontWeight:
-      //                                                           FontWeight.w500,
-      //                                                       color:
-      //                                                           Colors.black),
-      //                                                 )
-      //                                               ],
-      //                                             ),
-      //                                           ),
-      //                                             InkWell(
-      //                                             onTap: (){
-      //                                               addNewAccountController.remove();
-      //                                             },
-      //                                             splashColor: colors.AppColor.splashColor,
-      //                                             child: Row(
-      //                                               children: [
-      //                                                 Padding(
-      //                                                   padding:
-      //                                                       const EdgeInsets.all(8.0),
-      //                                                   child: Icon(
-      //                                                     Icons.remove_circle,
-      //                                                     color: colors.AppColor.fail,
-      //                                                   ),
-      //                                                 ),
-      //                                                 Text(
-      //                                                   'Remove',
-      //                                                   style: TextStyle(
-      //                                                       fontSize: 18,
-      //                                                       fontWeight:
-      //                                                           FontWeight.w500,
-      //                                                       color: colors.AppColor.fail),
-      //                                                 )
-      //                                               ],
-      //                                             ),
-      //                                           ),
-      //                                         ],
-      //                                       ),
-      //                                     ),
-      //                                   );
-      //                                 });
-      //                           },
-      //                           child: Icon(
-      //                             Icons.add,
-      //                             color: colors.AppColor.primaryColor,
-      //                           ),
-      //                         ))
-      //                       ],
-      //                     ),
-      //               )
+      appBar: AppBar(
+        title: const Tooltip(
+          message: 'Flutter Version: 6.4.0+302',
+          child: Text('HMS Safety Detect Demo'),
+        ),
+      ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                physics: const BouncingScrollPhysics(),
+                child: Wrap(
+                  spacing: 16,
+                  alignment: WrapAlignment.center,
+                  children: <Widget>[
+                    buildButton(
+                      text: 'isVerifyAppsCheck',
+                      onPressed: isVerifyAppsCheck,
+                    ),
+                    buildButton(
+                      text: 'enableAppsCheck',
+                      onPressed: enableAppsCheck,
+                    ),
+                    const Divider(),
+                    buildButton(
+                      text: 'initUrlCheck',
+                      onPressed: initUrlCheck,
+                    ),
+                    buildButton(
+                      text: 'shutdownUrlCheck',
+                      onPressed: shutdownUrlCheck,
+                    ),
+                    buildButton(
+                      text: 'urlCheck',
+                      onPressed: urlCheck,
+                    ),
+                    const Divider(),
+                    buildButton(
+                      text: 'initUserDetect',
+                      onPressed: initUserDetect,
+                    ),
+                    buildButton(
+                      text: 'shutdownUserDetect',
+                      onPressed: shutdownUserDetect,
+                    ),
+                    buildButton(
+                      text: 'userDetection',
+                      onPressed: userDetection,
+                    ),
+                    const Divider(),
+                    buildButton(
+                      text: 'initAntiFraud',
+                      onPressed: initAntiFraud,
+                    ),
+                    buildButton(
+                      text: 'releaseAntiFraud',
+                      onPressed: releaseAntiFraud,
+                    ),
+                    buildButton(
+                      text: 'getRiskToken',
+                      onPressed: getRiskToken,
+                    ),
+                    const Divider(),
+                    buildButton(
+                      text: 'sysIntegrity',
+                      onPressed: sysIntegrity,
+                    ),
+                    buildButton(
+                      text: 'getWifiDetectStatus',
+                      onPressed: getWifiDetectStatus,
+                    ),
+                    buildButton(
+                      text: 'getMaliciousAppsList',
+                      onPressed: getMaliciousAppsList,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const Divider(),
+          buildLogcat(),
+        ],
+      ),
+    );
+  }
+
+  Widget buildButton({
+    required String text,
+    required Future<dynamic> Function() onPressed,
+  }) {
+    return ElevatedButton(
+      onPressed: () async {
+        try {
+          final dynamic result = await onPressed.call();
+          log(text, result);
+        } catch (e) {
+          log(text, e, false);
+        }
+      },
+      child: Text(text),
+    );
+  }
+
+  Widget buildLogcat() {
+    return GestureDetector(
+      onDoubleTap: () => setState(() => logs.clear()),
+      child: AspectRatio(
+        aspectRatio: 2,
+        child: Container(
+          alignment: Alignment.center,
+          margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.10),
+            borderRadius: const BorderRadius.all(Radius.circular(16)),
+          ),
+          child: logs.isEmpty
+              ? const Text('Double tap to clear logs')
+              : ListView.separated(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: logs.length,
+                  itemBuilder: (_, int index) => Text(logs[index]),
+                  separatorBuilder: (_, __) => const Divider(),
+                ),
+        ),
+      ),
     );
   }
 }
+

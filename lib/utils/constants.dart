@@ -39,4 +39,5 @@ class Constants{
   static String hiveStorageName = 'sivaji_secure';
 
   static const String emptyIconPath = 'https://firebasestorage.googleapis.com/v0/b/everbrain-a6262.appspot.com/o/Company%20Logo%2Fempty_icon_2.png?alt=media&token=65e83cc8-8bd6-4401-aa67-aa8cb449b529';
+  static const String agreementLink = 'https://www.app-privacy-policy.com/live.php?token=3w4jY0dLCrNOO34PKy1Lr7jrreVrvniO';
 }

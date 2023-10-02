@@ -13,11 +13,11 @@ import '../../../../Model/vault_model.dart';
 import '../../../../controller/edit_account_controller.getx.dart';
 import '../../../../controller/flutter_encry_controller.getx.dart';
 import '../../../../controller/hive_controller.getx.dart';
-import '../../../Widget/appbar.dart';
-import '../../../Widget/global_widget.dart';
-import '../../../Widget/space.dart';
-import '../../../Widget/subtitle2_font.dart';
-import '../../../Widget/subtitle_font copy.dart';
+import '../../../widget/appbar.dart';
+import '../../../widget/global_widget.dart';
+import '../../../widget/space.dart';
+import '../../../widget/subtitle2_font.dart';
+import '../../../widget/subtitle_font copy.dart';
 
 class ViewVaultScreen extends StatefulWidget {
   final Vault vault;

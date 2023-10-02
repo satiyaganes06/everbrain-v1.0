@@ -7,7 +7,7 @@ import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/constants.dart' as constants;
 import 'package:everbrain/utils/dimensions.dart' as dimens;
 
-import '../../presentation/Screens/auth/signup/signup_Screen.dart';
+import '../Screens/auth/signup/signup_Screen.dart';
 
 
 
