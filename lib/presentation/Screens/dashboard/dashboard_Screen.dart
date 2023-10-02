@@ -15,6 +15,7 @@ import 'package:lottie/lottie.dart';
 import '../../../controller/hive_controller.getx.dart';
 import '../../../controller/login_controller.getx.dart';
 import '../../../test/test.dart';
+import '../../Widget/global_widget.dart';
 import '../../widget/custom_appbar.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -62,8 +63,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             // Get.to(() => AddNewAccount());
             Get.to(() => SearchBrandScreen());
           },
-          child: Lottie.asset('assets/lottie/add_vault_animation.json', height: Get.height*0.07, width: Get.height*0.07),
-          backgroundColor: colors.AppColor.tertiaryColor.withOpacity(0.1),
+          backgroundColor: colors.AppColor.secondaryColor,
+          elevation: 0.3,
+          child: Lottie.asset('assets/lottie/add_vault_animation_2.json', height: Get.height*0.07, width: Get.height*0.07),
         ));
   }
 
@@ -120,7 +122,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget buildPasswordList(BuildContext context) {
-    return Obx(() => hiveCtrl.vaultList.isEmpty
+    return Obx(() => hiveCtrl.isLoading.value ? SliverToBoxAdapter(
+      child: loading()
+    ) : hiveCtrl.vaultList.isEmpty
         ? SliverToBoxAdapter(
             child: Center(
             heightFactor: 2,
@@ -192,5 +196,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
     ));
+  }
+
+  loading(){
+    return Column(
+      children: List.generate(3, (index) => shimmerEffectBrandSearch())
+    );
   }
 }

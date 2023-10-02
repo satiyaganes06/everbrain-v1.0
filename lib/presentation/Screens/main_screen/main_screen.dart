@@ -39,6 +39,7 @@ class MainScreen extends StatelessWidget  {
             onTap: navi.changeTabIndex,
             enableFloatingNavBar:true,
             backgroundColor: Colors.white,
+            splashColor: Colors.transparent,
             boxShadow: [
               BoxShadow(
                 color: colors.AppColor.accentColor.withOpacity(0.1),

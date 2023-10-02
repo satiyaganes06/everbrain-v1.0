@@ -16,6 +16,7 @@ class HiveController extends GetxController{
   RxList<Vault> vaultList = <Vault>[].obs;
   final HiveVaultService _hiveVaultService = HiveVaultService();
   final HiveVaultPassService _hiveVaultPassService = HiveVaultPassService();
+  Rx<bool> isLoading = false.obs;
 
   Future<void> addVault(Vault vaultItem, VaultPassword vaultPassItem, BuildContext context) async{
     try {
@@ -88,7 +89,9 @@ class HiveController extends GetxController{
   }
 
   Future<void> getListVault() async {
+    isLoading.value = true;
     vaultList.value =  await _hiveVaultService.getVaultList();
+    isLoading.value = false;
     // vaultList.sort((a, b) {
     //   if (a.isFavourite && !b.isFavourite) {
     //     return -1;

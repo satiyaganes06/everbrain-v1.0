@@ -177,7 +177,7 @@ class _AddNewAccountState extends State<AddNewAccount> {
                                       IconButton(
                                         onPressed: () {
                                           Get.lazyPut(() => PasswordGenerator());
-                                           Get.find<PasswordGenerator>().updatePasswordFun(12);
+                                           Get.find<PasswordGenerator>().updatePasswordFun(16);
                                           addNewAccountController.vaultPasswordCtrl.text = Get.find<PasswordGenerator>().generatedPassword.value;
                                         },
                                         icon: const Icon(Icons.password_rounded),
