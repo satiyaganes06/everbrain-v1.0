@@ -7,10 +7,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
    <application
-        android:label="everbrain"
+        android:label="everBrain"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
+
+        <meta-data
+            android:name="com.huawei.hms.client.channel.androidMarket"
+            android:value="false"/>
         
         <activity
             android:name=".MainActivity"

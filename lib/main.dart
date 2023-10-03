@@ -1,12 +1,16 @@
 import 'dart:io';
+import 'package:everbrain/presentation/Screens/auth/login/loginScreen.dart';
 import 'package:everbrain/presentation/Screens/auth/widget_Tree.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'Model/vault_model.dart';
 import 'Model/vault_password_model.dart';
+import 'core/localServices/secure_storage_repository.dart';
+import 'core/networkService/firebase_service.dart';
 import 'presentation/Screens/auth/SplashScreen.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'main_module.dart';
@@ -57,13 +61,24 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver{
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state){
+  void didChangeAppLifecycleState(AppLifecycleState state) async{
     if(state == AppLifecycleState.inactive  || state == AppLifecycleState.detached) return;
       
     final isBackground = state == AppLifecycleState.paused;
 
-    if(isBackground){
+    if(isBackground) {
+      //  try {
+  //    String? value = FirebaseService().currentUserID();
+  //  print('Value $value');
+
+  //   if(value != 'null'){
       Get.offAll(LocalAuthScreen());
+    // }else{
+    //   Get.offAll(LoginScreen());
+    // }
+  //  } catch (e) {
+  //    Get.offAll(LoginScreen());
+  //  }
     }
   }
 
@@ -84,7 +99,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver{
                     ? Transition.fade
                     : Transition.cupertino,
                 debugShowCheckedModeBanner: false,
-                home: SplashScreen(),
+                home: const SplashScreen(),
               );
             } else {
               return const GetMaterialApp(

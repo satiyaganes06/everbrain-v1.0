@@ -85,6 +85,24 @@ class FlutterEncryController extends GetxController{
     }
   }
 
+  Future<LocalStorageResult> userIDClear() async{
+    var result;
+
+    try {
+      var result = await GetIt.I.get<LocalStorageSecure>().removeData('userID');
+
+      debugPrint(result.toString());
+
+      return result;
+
+    } catch (e) {
+
+      debugPrint(e.toString());
+      
+      return result;
+    }
+  }
+
   Future<LocalStorageResult> removeKeys() async{
     final loginCon = Get.find<LoginController>();
 

@@ -152,7 +152,10 @@ class FirebaseService {
 
         var resultKey = await Get.find<FlutterEncryController>()
             .masterPassClear(id);
-        if (resultKey == LocalStorageResult.deleted) {
+
+        // var resultUserIdKey = await Get.find<FlutterEncryController>()
+        //     .userIDClear();
+        if (resultKey == LocalStorageResult.deleted ) {
           Get.offAll(LoginScreen());
         } else {
           ScaffoldMessenger.of(context!).showSnackBar(SnackBar(

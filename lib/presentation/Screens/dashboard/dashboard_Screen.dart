@@ -8,13 +8,11 @@ import 'package:everbrain/presentation/widget/passwords_item.dart';
 import 'package:flutter/material.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/dimensions.dart' as dimens;
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import '../../../controller/hive_controller.getx.dart';
 import '../../../controller/login_controller.getx.dart';
-import '../../../test/test.dart';
 import '../../Widget/global_widget.dart';
 import '../../widget/custom_appbar.dart';
 
@@ -52,9 +50,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                      // buildTitle('Passwords'),
                       SliverToBoxAdapter(child: SizedBox(height: Get.height*0.02,),),
                       buildPasswordList(context),
-
-                      
-
                       
                     ]))),
         floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
