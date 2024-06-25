@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/dimensions.dart' as dimens;
+import 'package:lottie/lottie.dart';
 import '../../../controller/login_controller.getx.dart';
 import '../../widget/appbar.dart';
 import '../../widget/subtitle_font copy.dart';
@@ -205,7 +206,7 @@ class SettingScreen extends StatelessWidget {
                 ]),
 
                 onTap: () {
-                  Navigator.pop(context);
+
                 },
               ),
 
@@ -214,6 +215,47 @@ class SettingScreen extends StatelessWidget {
               SubtitleFont('Other'),
 
               Space(Get.height * 0.02),
+
+              ListTile(
+                enabled: false,
+                leading: Container(
+                  padding: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: colors.AppColor.premiumColor
+                  ),
+                  child: Icon(Icons.diamond_outlined, size: 20, color: colors.AppColor.secondaryColor,)
+                  //Lottie.asset('assets/lottie/premium_crown.json', fit: BoxFit.cover,),
+                ),  
+                //Icon(Icons.diamond_rounded, size: 20, color: colors.AppColor.premiumColor),
+                title: Row(
+                  children: [
+                    Text("Go Premium",
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: colors.AppColor.tertiaryColor)),
+                    
+
+                    Container(
+                      margin: const EdgeInsets.only(left: 10),
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                      decoration: BoxDecoration(
+                          color: colors.AppColor.fail,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Text("Coming Soon",
+                          style: GoogleFonts.poppins(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500,
+                              color: colors.AppColor.secondaryColor)),
+                    )
+                  ]
+                ),
+                onTap: () {
+                  //_showDialogBar(context, 'About', 'Everbrain v1.0.0');
+                },
+              ),
 
               ListTile(
                 leading: Icon(

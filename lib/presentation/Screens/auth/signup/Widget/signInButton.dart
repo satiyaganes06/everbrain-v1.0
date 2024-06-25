@@ -1,5 +1,6 @@
 
 import 'package:delayed_display/delayed_display.dart';
+import 'package:everbrain/presentation/widget/global_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/constants.dart' as constants;
@@ -29,10 +30,17 @@ class SignInButton extends StatelessWidget {
           onTap: (){
             if(formkey.currentState!.validate()){
               //signUpController.sigUpFun(context);
-              signUpController.userDetectionFun(context);
+
+              if(signUpController.isPasswordHintValid()){
+                signUpController.userDetectionFun(context);
+                
+              }else{
+                failMessage(context, 'Password hint cannot be the same as the master password.');
+
+              }
+              
             }
            
-            
           },
           splashColor: colors.AppColor.splashColor,
           borderRadius: BorderRadius.circular(dimens.Dimens.submitButtonContainerBorderSignUp),

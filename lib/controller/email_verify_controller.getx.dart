@@ -1,10 +1,12 @@
 
 import 'dart:async';
+import 'package:everbrain/controller/local_auth_controller.getx.dart';
 import 'package:everbrain/controller/login_controller.getx.dart';
 import 'package:get/get.dart';
 
 import '../presentation/Screens/auth/emailVerification/email_verify_Screen.dart';
 import '../presentation/Screens/dashboard/dashboard_Screen.dart';
+import 'flutter_encry_controller.getx.dart';
 
 class EmailVerifyController extends GetxController{
 
@@ -23,7 +25,10 @@ class EmailVerifyController extends GetxController{
       timer = Timer.periodic(const Duration(seconds: 3), (timer) { 
         loginController.firebaseService.checkEmailVerified(isEmailVerified);
         
-        if(isEmailVerified.value) timer.cancel();
+        if(isEmailVerified.value) {
+          //Get.find<FlutterEncryController>().currentUSerEmailVerified('true');
+          timer.cancel();
+        }
       });
       
     }

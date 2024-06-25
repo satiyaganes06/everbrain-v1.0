@@ -10,6 +10,7 @@ class AppColor{
   static Color shadowColor = const Color.fromARGB(255, 154, 154, 154);
   static Color lightGrey = const Color.fromARGB(255, 238, 238, 238);
   static Color splashColor = const Color(0xFF9aceff);
+  static Color premiumColor = Color.fromARGB(255, 255, 180, 82);
   static Color success = const Color.fromRGBO(76, 175, 80, 1);
   static Color success2 =const Color.fromARGB(255, 0, 167, 6);
   static Color fail = const Color.fromRGBO(255, 82, 82, 1);

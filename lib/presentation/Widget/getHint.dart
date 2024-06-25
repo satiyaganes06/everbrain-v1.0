@@ -20,7 +20,7 @@ class GetHintLogin extends StatelessWidget {
           delay: Duration(milliseconds:dimens.Dimens.delayAnimationLogInPage),
           child: TextButton(
             onPressed: (){
-              Get.to(()=> PasswordHintScreen());
+              Get.to(() => PasswordHintScreen());
             }, 
             child: Text(constants.Constants.masterPasswordHint,
               style: GoogleFonts.poppins(

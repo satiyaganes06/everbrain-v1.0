@@ -32,8 +32,20 @@ class FirebaseService {
     userID = _firebaseAuth.currentUser!.uid.toString();
   }
 
+  currentUserID2(){
+    try {
+      return _firebaseAuth.currentUser!.uid.toString();
+    } catch (e) {
+      return null;
+    }
+  }
+
   Stream<User?> get authStateChanges {
     return _firebaseAuth.authStateChanges();
+  }
+
+  Future<bool> emailVerified() async{
+    return  _firebaseAuth.currentUser!.emailVerified;
   }
 
   //E-mail Sign Up
@@ -109,6 +121,8 @@ class FirebaseService {
 
         var resultEmailKey = await encryController.userEmailStore(
             email, userID);
+        
+        //var resultEmailVerified = await encryController.currentUSerEmailVerified(_firebaseAuth.currentUser!.emailVerified.toString());
 
         if (resultPassKey == LocalStorageResult.saved &&
             resultEmailKey == LocalStorageResult.saved) {

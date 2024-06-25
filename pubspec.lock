@@ -776,6 +776,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  huawei_fido:
+    dependency: "direct main"
+    description:
+      name: huawei_fido
+      sha256: a2e5163a05433a017b1e7727bff1512f68f751d996ddabda285552872c1afeab
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.3.0+305"
   huawei_safetydetect:
     dependency: "direct main"
     description:

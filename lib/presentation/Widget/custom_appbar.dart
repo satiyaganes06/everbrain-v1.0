@@ -44,7 +44,7 @@ class CustomAppBar extends StatelessWidget {
       //   ),
       // ),
       title: Text(
-        'Everbrain',
+        'everBrain',
         style: GoogleFonts.poppins(
             color: colors.AppColor.secondaryColor,
             fontWeight: FontWeight.bold,

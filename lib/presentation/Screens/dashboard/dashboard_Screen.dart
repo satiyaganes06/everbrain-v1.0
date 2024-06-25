@@ -13,6 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import '../../../controller/hive_controller.getx.dart';
 import '../../../controller/login_controller.getx.dart';
+import '../../../test/test.dart';
 import '../../Widget/global_widget.dart';
 import '../../widget/custom_appbar.dart';
 
@@ -44,22 +45,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       CustomAppBar(),
 
                       buildSearchBar(context),
-                      //    buildTitle("Categories"),
+                      // buildTitle("Categories"),
                       SliverToBoxAdapter(child: SizedBox(height: Get.height*0.01,),),
+
                       buildCategoriesButtons(),
                      // buildTitle('Passwords'),
                       SliverToBoxAdapter(child: SizedBox(height: Get.height*0.02,),),
+
                       buildPasswordList(context),
+
+                      SliverToBoxAdapter(child: SizedBox(height: Get.height*0.06)),
                       
                     ]))),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             // Get.to(() => AddNewAccount());
             Get.to(() => SearchBrandScreen());
           },
           backgroundColor: colors.AppColor.secondaryColor,
-          elevation: 0.3,
+          elevation: 0.0,
+          shape: RoundedRectangleBorder(side: BorderSide(width: 2,color: colors.AppColor.accentColor),borderRadius: BorderRadius.circular(100)),
           child: Lottie.asset('assets/lottie/add_vault_animation_2.json', height: Get.height*0.07, width: Get.height*0.07),
         ));
   }
@@ -96,6 +102,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     false
                                 ? Colors.white
                                 : Colors.grey[200],
+                            // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: BorderSide(color: dashboardController
+                            //             .category_Selector_List.value[index] == false ?
+                            //         Colors.transparent : colors.AppColor.accentColor, width: 2)),
                             borderRadius: BorderRadius.circular(10),
                             child: InkWell(
                                 borderRadius: BorderRadius.circular(10),
@@ -177,13 +186,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
               prefixIcon: const Icon(Icons.search),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: Colors.transparent)),
+                  borderSide:  BorderSide(color: colors.AppColor.accentColor)),
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(color: Colors.transparent)),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: Colors.transparent)),
+                  borderSide: BorderSide(color: colors.AppColor.accentColor, width: 2)),
               filled: true,
               fillColor: Colors.grey[200],
               contentPadding:

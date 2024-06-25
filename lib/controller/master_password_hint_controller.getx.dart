@@ -63,14 +63,12 @@ class MasterPassswordHintController extends GetxController {
 
   Future<void> userDetectionFun(BuildContext context) async {
     await GetIt.I.get<HmsRepository>().userDetection().then((token) {
-      
-      if(token != null){
+      if (token != null) {
         sendHintToEmail(context);
-      }else{
+      } else {
         failMessage(context, 'User not verified');
       }
     });
-    
   }
 
   @override

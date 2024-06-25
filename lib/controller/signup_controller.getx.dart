@@ -63,6 +63,25 @@ class SignUpController extends GetxController {
     }
   }
 
+  bool isPasswordHintValid() {
+    String password = passwordField.text;
+    String passwordHint = passwordHints.text;
+    // Define a threshold for the maximum number of continuous characters allowed.
+    int maxContinuousChars = 4;
+
+    for (int i = 0; i <= password.length - maxContinuousChars; i++) {
+      // Extract a substring of maxContinuousChars length from the password.
+      String substring = password.substring(i, i + maxContinuousChars);
+
+      // Check if the substring is present in the password hint.
+      if (passwordHint.toLowerCase().contains(substring.toLowerCase())) {
+        return false; // Password hint contains more than 4 continuous characters from the password.
+      }
+    }
+
+    return true; // Password hint is valid.
+  }
+
   Future<void> userDetectionFun(BuildContext context) async {
     if (isAgree) {
       await GetIt.I.get<HmsRepository>().userDetection().then((token) {

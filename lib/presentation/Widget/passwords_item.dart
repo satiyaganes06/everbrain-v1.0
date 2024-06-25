@@ -46,14 +46,17 @@ class PasswordItem extends StatelessWidget {
             splashColor: Colors.transparent,
             focusColor:  Colors.transparent,
             hoverColor: Colors.transparent,
-            leading: OctoImage.fromSet(
-                  width: Get.height*0.06,
-                  image: CachedNetworkImageProvider(vaultInfo.websiteImageUrl, cacheManager: customCacheManager),
-                  octoSet: OctoSet.circleAvatar(
-                    backgroundColor: colors.AppColor.secondaryColor, text: Center(child: CircularProgressIndicator(color: colors.AppColor.accentColor,),),
+            leading: Hero(
+              tag: vaultInfo.vaultID,
+              child: OctoImage.fromSet(
+                    width: Get.height*0.06,
+                    image: CachedNetworkImageProvider(vaultInfo.websiteImageUrl, cacheManager: customCacheManager),
+                    octoSet: OctoSet.circleAvatar(
+                      backgroundColor: colors.AppColor.secondaryColor, text: Center(child: CircularProgressIndicator(color: colors.AppColor.accentColor,),),
+                    ),
+                    fit: BoxFit.cover,
                   ),
-                  fit: BoxFit.cover,
-                ),
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),

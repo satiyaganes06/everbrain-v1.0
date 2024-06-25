@@ -67,6 +67,26 @@ class FlutterEncryController extends GetxController{
     }
   }
 
+  Future<LocalStorageResult> currentUSerEmailVerified(String value) async{
+    var result;
+
+    try {
+      var result = await GetIt.I.get<LocalStorageSecure>().saveString(
+        'emailVerifiedValue', value 
+      );
+
+      debugPrint(result.toString());
+
+      return result;
+
+    } catch (e) {
+
+      debugPrint(e.toString());
+
+      return result;
+    }
+  }
+
   Future<LocalStorageResult> masterPassClear(String userID) async{
     var result;
 

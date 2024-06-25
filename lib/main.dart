@@ -13,6 +13,7 @@ import 'core/localServices/secure_storage_repository.dart';
 import 'core/networkService/firebase_service.dart';
 import 'presentation/Screens/auth/SplashScreen.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
+import 'package:everbrain/utils/keys.dart' as KY;
 import 'main_module.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
@@ -70,17 +71,24 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver{
       //  try {
   //    String? value = FirebaseService().currentUserID();
   //  print('Value $value');
+    Get.offAll(LocalAuthScreen());
 
   //   if(value != 'null'){
-      Get.offAll(LocalAuthScreen());
+    // var value = await GetIt.I.get<LocalStorageSecure>().getString('emailVerifiedValue');
+    // var value2 = FirebaseService().currentUserID2();
+
+    // if(value2!=null){
+    //   if(value == true){
+      
+    //     Get.offAll(LocalAuthScreen());
+    
+    //   }
     // }else{
     //   Get.offAll(LoginScreen());
     // }
-  //  } catch (e) {
-  //    Get.offAll(LoginScreen());
-  //  }
-    }
-  }
+
+    
+  }}
 
   @override
   Widget build(BuildContext context) {

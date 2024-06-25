@@ -1,6 +1,7 @@
 
 import 'package:everbrain/presentation/widget/global_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:huawei_safetydetect/huawei_safetydetect.dart';
 
 import 'hms_respository.dart';
@@ -17,9 +18,10 @@ class HmsRepositoryImpl extends HmsRepository{
 
       await SafetyDetect.initUrlCheck();
       await SafetyDetect.initUserDetect();
-    }).catchError((dynamic e) {
-      debugPrint('getAppID ' + e);
       
+    }).catchError((dynamic e) {
+      Get.snackbar('Platform Error', 'Please install HMS Core on your device', snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red, colorText: Colors.white, duration: const Duration(seconds: 10));
+
     });
     
   }
@@ -46,6 +48,7 @@ class HmsRepositoryImpl extends HmsRepository{
 
   @override
   Future<void> initUserDetect() async {
+    
     return await SafetyDetect.initUserDetect();
   }
 

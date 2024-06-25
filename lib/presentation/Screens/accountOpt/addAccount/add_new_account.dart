@@ -16,6 +16,7 @@ import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/constants.dart' as constants;
 import 'package:everbrain/utils/dimensions.dart' as dimens;
 
+import '../../../../core/localServices/local_auth.dart';
 import '../../../widget/appbar.dart';
 import '../../../widget/category_button.dart';
 import '../../../widget/global_widget.dart';
@@ -302,9 +303,20 @@ class _AddNewAccountState extends State<AddNewAccount> {
                                             colors.AppColor.secondaryColor,
                                         value: addNewAccountController
                                             .isBiometricEnable,
-                                        onToggle: (val) {
-                                          addNewAccountController
+                                        onToggle: (val) async{
+                                           
+                                          if(await LocalAuth.hasBiometrics()){
+                                            addNewAccountController
                                               .reMpassNeededToggle();
+                                          }else{
+
+                                            // if(!mounted){
+                                              failMessage(context, 'Your device does not support biometric authentication');
+                                          //  }
+                                            
+                                            
+                                          } 
+                                           
                                         },
                                       ),
                                     ]),

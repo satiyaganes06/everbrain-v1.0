@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:everbrain/utils/colors.dart' as colors;
 import 'package:everbrain/utils/keys.dart' as KY;
 import 'package:everbrain/utils/dimensions.dart' as dimens;
+import 'package:lottie/lottie.dart';
 import '../../../../Model/vault_model.dart';
 import '../../../../controller/edit_account_controller.getx.dart';
 import '../../../../controller/flutter_encry_controller.getx.dart';
@@ -301,7 +302,8 @@ class _ViewVaultScreenState extends State<ViewVaultScreen> {
                   vault: widget.vault);
         },
         backgroundColor: colors.AppColor.tertiaryColor,
-        child: const Icon(Icons.edit),
+        child: Lottie.asset('assets/lottie/edit_animation.json',
+            height: 30, width: 30, fit: BoxFit.fill),
       ),
     );
   }

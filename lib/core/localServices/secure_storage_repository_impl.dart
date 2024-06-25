@@ -37,6 +37,7 @@ class LocalStorageSecureImpl extends LocalStorageSecure {
     }
   }
 
+
   @override
   Future<String?> getString(String key) async {
     if (storage == null) await init();
